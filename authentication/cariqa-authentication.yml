@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/cariqa-openapi-original.yml
+docs: https://docs.cariqa.com/authentication
+summary:
+  types:
+  - http
+  http_schemes:
+  - bearer
+  token_format: JWT
+  onboarding: Tokens are issued by the Cariqa team through private channels during onboarding.
+  expiration: Access tokens are currently issued without an expiration date; they can be revoked on request, and multiple tokens can be issued for zero-downtime rotation.
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: "JWT Authorization header using the Bearer scheme. Include `Authorization: Bearer [example key]` on every request to a protected endpoint."
+  sources:
+  - openapi/cariqa-openapi-original.yml
+notes:
+- Credentials are environment-specific — development tokens do not work in production and vice versa.
+- 401 Unauthorized indicates the Authorization header is missing/malformed; 403 Forbidden indicates an invalid or expired token.
+security_recommendations:
+- Store secrets in a secure environment.
+- Use HTTPS for all API requests.
+- Rotate credentials periodically.
+- Do not log sensitive credentials.
