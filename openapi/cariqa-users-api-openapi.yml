@@ -1,0 +1,390 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect Billing Details Users API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+servers:
+- url: https://connect.cariqa.com
+  description: Connect
+- url: https://dev.connect.cariqa.com
+  description: Connect Playground
+tags:
+- name: Users
+paths:
+  /api/v1/users/:
+    get:
+      operationId: users_list
+      description: Retrieve list of the users
+      summary: List Users
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: 'Search user by: id, external_id'
+        schema:
+          type: string
+      tags:
+      - Users
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIUserList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    post:
+      operationId: users_create
+      description: Create user
+      summary: Create User
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIUser'
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIUser'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/:
+    get:
+      operationId: users_retrieve
+      description: Retrieve user
+      summary: Get User
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Users
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIUser'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: Update user
+      summary: Update User
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIUser'
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIUser'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    delete:
+      operationId: users_destroy
+      description: Soft-delete user
+      summary: Soft-delete User
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Users
+      security:
+      - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    PatchedConnectAPIUser:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        custom_properties:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
+          nullable: true
+    PaginatedConnectAPIUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIUser'
+    LocaleEnum:
+      enum:
+      - en
+      - de
+      type: string
+      description: '* `en` - EN
+
+        * `de` - DE'
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
+    ConnectAPIUserCustomProperties:
+      type: object
+      properties:
+        external_id:
+          type: string
+          nullable: true
+          description: External id of the user provided by Connect backend
+          maxLength: 250
+    ConnectAPIUser:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        custom_properties:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
+          nullable: true
+      required:
+      - id
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.

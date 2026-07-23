@@ -1,0 +1,385 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect Billing Details Payments API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+servers:
+- url: https://connect.cariqa.com
+  description: Connect
+- url: https://dev.connect.cariqa.com
+  description: Connect Playground
+tags:
+- name: Payments
+paths:
+  /api/v1/users/{user_id}/payment-methods/:
+    get:
+      operationId: users_payment_methods_list
+      description: Retrieve list of user payment methods
+      summary: List Payment Methods
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Payments
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIPMList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/payment-methods/{pm}/:
+    delete:
+      operationId: users_payment_methods_destroy
+      description: Remove payment methods from the user
+      summary: Delete Payment Method
+      parameters:
+      - in: path
+        name: pm
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Payments
+      security:
+      - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/payment-methods/{pm}/default/:
+    post:
+      operationId: users_payment_methods_default_create
+      description: Set payment method as default
+      summary: Set Payment Method as Default
+      parameters:
+      - in: path
+        name: pm
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Payments
+      security:
+      - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/setup-intents/:
+    get:
+      operationId: users_setup_intents_retrieve
+      description: Retrieve client secret which is used in payment method creation
+      summary: Get Setup Intent
+      parameters:
+      - in: query
+        name: pm_type
+        schema:
+          enum:
+          - card
+          type: string
+          default: card
+          minLength: 1
+        description: '* `card` - card'
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Payments
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPISetupIntent'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+components:
+  schemas:
+    PaginatedConnectAPIPMList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIPM'
+    ConnectAPISetupIntent:
+      type: object
+      properties:
+        setup_intent_client_secret:
+          type: string
+      required:
+      - setup_intent_client_secret
+    ConnectAPIPMTypeEnum:
+      enum:
+      - card
+      - apple_pay
+      - google_pay
+      type: string
+      description: '* `card` - card
+
+        * `apple_pay` - apple_pay
+
+        * `google_pay` - google_pay'
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    ConnectAPIPM:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the payment method given by Stripe
+        default:
+          type: boolean
+          description: Whether this is the default payment method for the user
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIPMTypeEnum'
+          description: 'Type of the payment method. Example: card
+
+
+            * `card` - card
+
+            * `apple_pay` - apple_pay
+
+            * `google_pay` - google_pay'
+        card:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPICardPM'
+          description: Payment method details
+        created_at:
+          type: string
+          description: Timestamp of when the payment method was attached to the user
+      required:
+      - card
+      - created_at
+      - default
+      - id
+      - type
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
+    ConnectAPICardPM:
+      type: object
+      properties:
+        brand:
+          type: string
+          description: 'Card brand. Example: visa'
+        last4:
+          type: string
+          description: Last 4 digits of the card number
+        expiration_date:
+          type: string
+          description: 'Expiration date of the card. Format: MM/YY'
+        cardholder_name:
+          type: string
+          nullable: true
+          description: Cardholder name, if present
+      required:
+      - brand
+      - cardholder_name
+      - expiration_date
+      - last4
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.

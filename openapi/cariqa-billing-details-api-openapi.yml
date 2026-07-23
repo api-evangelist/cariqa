@@ -1,0 +1,247 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect Billing Details API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+servers:
+- url: https://connect.cariqa.com
+  description: Connect
+- url: https://dev.connect.cariqa.com
+  description: Connect Playground
+tags:
+- name: Billing Details
+paths:
+  /api/v1/users/{user_id}/billing-details/:
+    get:
+      operationId: users_billing_details_retrieve
+      description: Retrieve billing details of the user
+      summary: Get Billing Details
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Billing Details
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    put:
+      operationId: users_billing_details_update
+      description: Update billing details of the user
+      summary: Update Billing Details
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Billing Details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIBillingDetails'
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+components:
+  schemas:
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
+    AccountTypeEnum:
+      enum:
+      - personal
+      - business
+      type: string
+      description: '* `personal` - personal
+
+        * `business` - business'
+    ConnectAPIBillingDetails:
+      type: object
+      description: 'Serializer which is used to serialize data with the possible business
+
+        details if exist'
+      properties:
+        country:
+          type: string
+          nullable: true
+          maxLength: 150
+        city:
+          type: string
+          nullable: true
+          maxLength: 50
+        tax_id:
+          type: string
+          nullable: true
+          maxLength: 30
+        account_type:
+          $ref: '#/components/schemas/AccountTypeEnum'
+        company_name:
+          type: string
+          nullable: true
+        vat_id:
+          type: string
+          nullable: true
+        line1:
+          type: string
+        postal_code:
+          type: string
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 150
+      required:
+      - line1
+      - postal_code
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.

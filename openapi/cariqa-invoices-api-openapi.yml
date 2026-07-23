@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect Billing Details Invoices API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+servers:
+- url: https://connect.cariqa.com
+  description: Connect
+- url: https://dev.connect.cariqa.com
+  description: Connect Playground
+tags:
+- name: Invoices
+paths:
+  /api/v1/users/{user_id}/invoices/:
+    get:
+      operationId: users_invoices_list
+      description: List invoices of the user
+      summary: List invoices of the user
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Invoices
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIInvoiceListList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+components:
+  schemas:
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    PaginatedConnectAPIInvoiceListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIInvoiceList'
+    ConnectAPIInvoiceList:
+      type: object
+      description: 'Extended invoice list serializer (payg flow should have session id).
+
+
+        :param charging_session_id: Id of the corresponding charging session.'
+      properties:
+        link:
+          type: string
+          description: Link to download the invoice
+        total:
+          type: string
+          description: Total amount of the invoice
+        date:
+          type: string
+          format: date-time
+          description: Date of the invoice
+        refund:
+          type: boolean
+          description: Whether the invoice has been refunded
+        charging_session_id:
+          type: string
+          nullable: true
+          description: Unique identifier of the charging session
+        currency:
+          type: string
+          description: Currency used for billing
+      required:
+      - currency
+      - date
+      - link
+      - refund
+      - total
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.

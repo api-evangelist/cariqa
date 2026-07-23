@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect Billing Details Debts API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+servers:
+- url: https://connect.cariqa.com
+  description: Connect
+- url: https://dev.connect.cariqa.com
+  description: Connect Playground
+tags:
+- name: Debts
+paths:
+  /api/v1/users/{user_id}/charging/debts/:
+    get:
+      operationId: users_charging_debts_list
+      description: Fetch the list of charging session debts of the user
+      summary: List Charging Debts
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Debts
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIDebtList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+components:
+  schemas:
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    ConnectAPIDebt:
+      type: object
+      properties:
+        session_id:
+          type: string
+          description: Unique identifier of the charging session
+        payment_intent_client_secret:
+          type: string
+          description: Stripe Client Secret which should be used to pay the debt
+        amount:
+          type: string
+          description: Amount of the debt to charge
+        currency:
+          type: string
+          description: '3-letter currency of the debt (Example: EUR)'
+      required:
+      - amount
+      - currency
+      - payment_intent_client_secret
+      - session_id
+    PaginatedConnectAPIDebtList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIDebt'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.

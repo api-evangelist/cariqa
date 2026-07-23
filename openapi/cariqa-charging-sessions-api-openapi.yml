@@ -1,0 +1,704 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect Billing Details Charging Sessions API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+servers:
+- url: https://connect.cariqa.com
+  description: Connect
+- url: https://dev.connect.cariqa.com
+  description: Connect Playground
+tags:
+- name: Charging Sessions
+paths:
+  /api/v1/users/{user_id}/charging-sessions/:
+    get:
+      operationId: users_charging_sessions_list
+      description: Retrieve list of user charging sessions
+      summary: List Charging Sessions
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Charging Sessions
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIChargingSessionList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/charging-sessions/{session_id}/:
+    get:
+      operationId: users_charging_sessions_retrieve
+      description: Retrieve charging session of the user
+      summary: Get Charging Session
+      parameters:
+      - in: path
+        name: session_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Charging Sessions
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIChargingSession'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    patch:
+      operationId: users_charging_sessions_partial_update
+      description: Rate charging session
+      summary: Rate charging session
+      parameters:
+      - in: path
+        name: session_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Charging Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIChargingSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIChargingSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIChargingSession'
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIChargingSession'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/charging/start/:
+    post:
+      operationId: users_charging_start_create
+      description: Start charging session synchronously
+      summary: Start Charging Session
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Charging Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIStartChargingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIStartChargingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIStartChargingRequest'
+        required: true
+      security:
+      - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIChargingSession'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+  /api/v1/users/{user_id}/charging/stop/{session_id}/:
+    post:
+      operationId: users_charging_stop_create
+      description: Stop charging session
+      summary: Stop Charging Session
+      parameters:
+      - in: path
+        name: session_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Charging Sessions
+      security:
+      - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+components:
+  schemas:
+    PaginatedConnectAPIChargingSessionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIChargingSession'
+    RatesEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+      description: '* `1` - 1
+
+        * `2` - 2
+
+        * `3` - 3
+
+        * `4` - 4
+
+        * `5` - 5'
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    ConnectAPIUserFacingSessionPrices:
+      type: object
+      properties:
+        kwh_price:
+          type: string
+          nullable: true
+          readOnly: true
+          description: KWH-based price applied to session and used for billing
+        time_price:
+          type: string
+          nullable: true
+          readOnly: true
+          description: TIME-based price applied to session and used for billing
+        session_fee:
+          type: string
+          nullable: true
+          readOnly: true
+          description: One-off fee applied to session and used for billing
+        blocking_fee:
+          type: string
+          nullable: true
+          readOnly: true
+          description: Merged info about the blocking fees applied to session and used for billing
+        starting_fee:
+          type: string
+          nullable: true
+          readOnly: true
+          description: One-off Cariqa fee applied to session and used for billing
+        grace_period_minutes:
+          type: integer
+          nullable: true
+          description: Amount of time in minutes after which blocking fees starts to apply
+        blocking_cap:
+          type: string
+          nullable: true
+          description: Maximum amount of blocking fees which can be charged in one transaction.
+        currency:
+          type: string
+          maxLength: 3
+      required:
+      - blocking_cap
+      - blocking_fee
+      - grace_period_minutes
+      - kwh_price
+      - session_fee
+      - starting_fee
+      - time_price
+    ConnectAPIChargingSession:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        start_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        end_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        duration:
+          type: integer
+          readOnly: true
+          nullable: true
+        consumed_energy:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,3})?$
+          readOnly: true
+          nullable: true
+        is_active:
+          type: boolean
+          readOnly: true
+        evse_id:
+          type: string
+          readOnly: true
+        station_info:
+          allOf:
+          - $ref: '#/components/schemas/StationInfo'
+          readOnly: true
+        is_partner:
+          type: boolean
+          readOnly: true
+        logo_url:
+          type: string
+          nullable: true
+          description: Return station's operator logo url.
+          readOnly: true
+        user_facing_session_prices:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserFacingSessionPrices'
+          readOnly: true
+        session_cost:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIPAYGSummary'
+          readOnly: true
+        rates:
+          nullable: true
+          minimum: 0
+          maximum: 32767
+          oneOf:
+          - $ref: '#/components/schemas/RatesEnum'
+          - $ref: '#/components/schemas/NullEnum'
+      required:
+      - consumed_energy
+      - duration
+      - end_time
+      - evse_id
+      - id
+      - is_active
+      - is_partner
+      - logo_url
+      - session_cost
+      - start_time
+      - station_info
+      - user_facing_session_prices
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
+    ConnectAPIPAYGSummary:
+      type: object
+      description: PAYG summary serializer.
+      properties:
+        kwh_cost:
+          type: string
+          nullable: true
+          description: KWH-based part of the charging session cost
+        time_cost:
+          type: string
+          nullable: true
+          description: TIME-based part of the charging session cost
+        session_fee_cost:
+          type: string
+          nullable: true
+          description: One-off session fee as a part of the charging session cost
+        blocking_fee_cost:
+          type: string
+          nullable: true
+          description: Blocking fee cost as a part of the charging session cost
+        starting_fee_cost:
+          type: string
+          nullable: true
+          description: One-off Cariqa fee as a part of the charging session cost
+        invoice_download:
+          type: string
+          nullable: true
+          description: URL to download the invoice
+          readOnly: true
+        invoice_vat:
+          type: string
+          description: VAT applied to the invoice
+        invoice_summary:
+          type: string
+          description: Summary of the invoice
+        invoice_credits:
+          type: string
+          description: Credits applied to the invoice. Has negative value in case discount applied. Rarely can have positive value
+        invoice_discount:
+          type: string
+          description: Discount applied to the invoice
+        currency:
+          type: string
+          readOnly: true
+          description: Currency used for billing
+      required:
+      - blocking_fee_cost
+      - currency
+      - invoice_credits
+      - invoice_discount
+      - invoice_download
+      - invoice_summary
+      - invoice_vat
+      - kwh_cost
+      - session_fee_cost
+      - starting_fee_cost
+      - time_cost
+    NullEnum:
+      enum:
+      - null
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
+    PatchedConnectAPIChargingSession:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        start_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        end_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        duration:
+          type: integer
+          readOnly: true
+          nullable: true
+        consumed_energy:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,3})?$
+          readOnly: true
+          nullable: true
+        is_active:
+          type: boolean
+          readOnly: true
+        evse_id:
+          type: string
+          readOnly: true
+        station_info:
+          allOf:
+          - $ref: '#/components/schemas/StationInfo'
+          readOnly: true
+        is_partner:
+          type: boolean
+          readOnly: true
+        logo_url:
+          type: string
+          nullable: true
+          description: Return station's operator logo url.
+          readOnly: true
+        user_facing_session_prices:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserFacingSessionPrices'
+          readOnly: true
+        session_cost:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIPAYGSummary'
+          readOnly: true
+        rates:
+          nullable: true
+          minimum: 0
+          maximum: 32767
+          oneOf:
+          - $ref: '#/components/schemas/RatesEnum'
+          - $ref: '#/components/schemas/NullEnum'
+    StationInfo:
+      type: object
+      properties:
+        station_name:
+          type: string
+          nullable: true
+          maxLength: 250
+        station_address:
+          type: string
+          nullable: true
+          maxLength: 250
+        country:
+          type: string
+          nullable: true
+          maxLength: 10
+        station_speed:
+          type: string
+          nullable: true
+          maxLength: 100
+        connector_standard:
+          type: string
+          nullable: true
+          maxLength: 40
+        connector_power:
+          type: number
+          format: double
+          nullable: true
+        support_phone:
+          type: string
+          nullable: true
+          maxLength: 30
+        latitude:
+          type: string
+          nullable: true
+          maxLength: 30
+        longitude:
+          type: string
+          nullable: true
+          maxLength: 30
+    ConnectAPIStartChargingRequest:
+      type: object
+      description: "Start charge request serializer.\n\n:param evse_id: Evse id of the station to charge at.\n:param payment_method_id: Stripe id of the payment method\n which should be used for PAYG.\n:param car_id: Id of the car to charge."
+      properties:
+        evse_id:
+          type: string
+        payment_method_id:
+          type: string
+      required:
+      - evse_id
+      - payment_method_id
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.

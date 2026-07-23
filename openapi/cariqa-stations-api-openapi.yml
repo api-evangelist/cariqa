@@ -1,0 +1,1037 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect Billing Details Stations API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+servers:
+- url: https://connect.cariqa.com
+  description: Connect
+- url: https://dev.connect.cariqa.com
+  description: Connect Playground
+tags:
+- name: Stations
+paths:
+  /api/v1/stations/around/:
+    get:
+      operationId: stations_around_list
+      description: List stations around
+      summary: Get Stations Around
+      parameters:
+      - in: query
+        name: connector_types
+        schema:
+          type: array
+          items:
+            enum:
+            - CHADEMO
+            - DOMESTIC_A
+            - DOMESTIC_B
+            - DOMESTIC_C
+            - DOMESTIC_D
+            - DOMESTIC_E
+            - DOMESTIC_F
+            - DOMESTIC_G
+            - DOMESTIC_H
+            - DOMESTIC_I
+            - DOMESTIC_J
+            - DOMESTIC_K
+            - DOMESTIC_L
+            - IEC_60309_2_single_16
+            - IEC_60309_2_three_16
+            - IEC_60309_2_three_32
+            - IEC_60309_2_three_64
+            - IEC_62196_T1
+            - IEC_62196_T1_COMBO
+            - IEC_62196_T2
+            - IEC_62196_T2_COMBO
+            - IEC_62196_T3A
+            - IEC_62196_T3C
+            - TESLA_R
+            - TESLA_S
+            type: string
+            description: '* `CHADEMO` - CHADEMO
+
+              * `DOMESTIC_A` - DOMESTIC_A
+
+              * `DOMESTIC_B` - DOMESTIC_B
+
+              * `DOMESTIC_C` - DOMESTIC_C
+
+              * `DOMESTIC_D` - DOMESTIC_D
+
+              * `DOMESTIC_E` - DOMESTIC_E
+
+              * `DOMESTIC_F` - DOMESTIC_F
+
+              * `DOMESTIC_G` - DOMESTIC_G
+
+              * `DOMESTIC_H` - DOMESTIC_H
+
+              * `DOMESTIC_I` - DOMESTIC_I
+
+              * `DOMESTIC_J` - DOMESTIC_J
+
+              * `DOMESTIC_K` - DOMESTIC_K
+
+              * `DOMESTIC_L` - DOMESTIC_L
+
+              * `IEC_60309_2_single_16` - IEC_60309_2_single_16
+
+              * `IEC_60309_2_three_16` - IEC_60309_2_three_16
+
+              * `IEC_60309_2_three_32` - IEC_60309_2_three_32
+
+              * `IEC_60309_2_three_64` - IEC_60309_2_three_64
+
+              * `IEC_62196_T1` - IEC_62196_T1
+
+              * `IEC_62196_T1_COMBO` - IEC_62196_T1_COMBO
+
+              * `IEC_62196_T2` - IEC_62196_T2
+
+              * `IEC_62196_T2_COMBO` - IEC_62196_T2_COMBO
+
+              * `IEC_62196_T3A` - IEC_62196_T3A
+
+              * `IEC_62196_T3C` - IEC_62196_T3C
+
+              * `TESLA_R` - TESLA_R
+
+              * `TESLA_S` - TESLA_S'
+        description: List of connector types to filter stations
+      - in: query
+        name: distance
+        schema:
+          type: integer
+          default: 100
+        description: Radius to search stations (in meters).
+      - in: query
+        name: latitude
+        schema:
+          type: number
+          format: double
+        description: Latitude of the center of the search area.
+        required: true
+      - in: query
+        name: longitude
+        schema:
+          type: number
+          format: double
+        description: Longitude of the center of the search area.
+        required: true
+      - in: query
+        name: only_available
+        schema:
+          type: boolean
+          default: false
+        description: Whether to show only available stations
+      - in: query
+        name: only_partners
+        schema:
+          type: boolean
+          default: false
+        description: Whether to show only partner stations
+      - in: query
+        name: operators
+        schema:
+          type: array
+          items:
+            type: string
+        description: List of partner operator names to filter stations
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Stations
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIStationList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/stations/details/:
+    get:
+      operationId: stations_details_retrieve
+      description: Retrieve station details
+      summary: Get Station Details
+      parameters:
+      - in: query
+        name: id
+        schema:
+          type: string
+          minLength: 1
+        required: true
+      - in: query
+        name: type
+        schema:
+          enum:
+          - evse_id
+          - station_id
+          type: string
+          minLength: 1
+        description: '* `evse_id` - evse_id
+
+          * `station_id` - station_id'
+        required: true
+      tags:
+      - Stations
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIStation'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/stations/partners/:
+    get:
+      operationId: stations_partners_list
+      description: Retrieve the list of partner names to use it for filtering
+      summary: Partners list
+      tags:
+      - Stations
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectAPIPartnerFilterOperator'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '423':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+  /api/v1/stations/tile/:
+    get:
+      operationId: stations_tile_retrieve
+      description: Fetch tile
+      summary: Get Map Tile
+      parameters:
+      - in: query
+        name: connector_types
+        schema:
+          type: array
+          items:
+            enum:
+            - CHADEMO
+            - DOMESTIC_A
+            - DOMESTIC_B
+            - DOMESTIC_C
+            - DOMESTIC_D
+            - DOMESTIC_E
+            - DOMESTIC_F
+            - DOMESTIC_G
+            - DOMESTIC_H
+            - DOMESTIC_I
+            - DOMESTIC_J
+            - DOMESTIC_K
+            - DOMESTIC_L
+            - IEC_60309_2_single_16
+            - IEC_60309_2_three_16
+            - IEC_60309_2_three_32
+            - IEC_60309_2_three_64
+            - IEC_62196_T1
+            - IEC_62196_T1_COMBO
+            - IEC_62196_T2
+            - IEC_62196_T2_COMBO
+            - IEC_62196_T3A
+            - IEC_62196_T3C
+            - TESLA_R
+            - TESLA_S
+            type: string
+            description: '* `CHADEMO` - CHADEMO
+
+              * `DOMESTIC_A` - DOMESTIC_A
+
+              * `DOMESTIC_B` - DOMESTIC_B
+
+              * `DOMESTIC_C` - DOMESTIC_C
+
+              * `DOMESTIC_D` - DOMESTIC_D
+
+              * `DOMESTIC_E` - DOMESTIC_E
+
+              * `DOMESTIC_F` - DOMESTIC_F
+
+              * `DOMESTIC_G` - DOMESTIC_G
+
+              * `DOMESTIC_H` - DOMESTIC_H
+
+              * `DOMESTIC_I` - DOMESTIC_I
+
+              * `DOMESTIC_J` - DOMESTIC_J
+
+              * `DOMESTIC_K` - DOMESTIC_K
+
+              * `DOMESTIC_L` - DOMESTIC_L
+
+              * `IEC_60309_2_single_16` - IEC_60309_2_single_16
+
+              * `IEC_60309_2_three_16` - IEC_60309_2_three_16
+
+              * `IEC_60309_2_three_32` - IEC_60309_2_three_32
+
+              * `IEC_60309_2_three_64` - IEC_60309_2_three_64
+
+              * `IEC_62196_T1` - IEC_62196_T1
+
+              * `IEC_62196_T1_COMBO` - IEC_62196_T1_COMBO
+
+              * `IEC_62196_T2` - IEC_62196_T2
+
+              * `IEC_62196_T2_COMBO` - IEC_62196_T2_COMBO
+
+              * `IEC_62196_T3A` - IEC_62196_T3A
+
+              * `IEC_62196_T3C` - IEC_62196_T3C
+
+              * `TESLA_R` - TESLA_R
+
+              * `TESLA_S` - TESLA_S'
+        description: List of connector types to filter stations
+      - in: query
+        name: max_price
+        schema:
+          type: number
+          format: double
+        description: Filter out stations with price higher than this
+      - in: query
+        name: only_available
+        schema:
+          type: boolean
+          default: false
+        description: Whether to show only available stations
+      - in: query
+        name: only_partners
+        schema:
+          type: boolean
+          default: false
+        description: Whether to show only partner stations
+      - in: query
+        name: operators
+        schema:
+          type: array
+          items:
+            type: string
+        description: List of partner operator names to filter stations
+      - in: query
+        name: power_groups
+        schema:
+          type: array
+          items:
+            enum:
+            - slow
+            - fast
+            - turbo
+            type: string
+            description: '* `slow` - slow
+
+              * `fast` - fast
+
+              * `turbo` - turbo'
+        description: List of power groups to filter stations
+      - in: query
+        name: x
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Identifies the X coordinates of the tile in the grid
+        required: true
+      - in: query
+        name: y
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Identifies the Y coordinates of the tile in the grid
+        required: true
+      - in: query
+        name: z
+        schema:
+          type: integer
+        description: Zoom level
+        required: true
+      tags:
+      - Stations
+      security:
+      - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPITileResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+components:
+  schemas:
+    Status80fEnum:
+      enum:
+      - free
+      - busy
+      - unknown
+      - error
+      type: string
+      description: '* `free` - free
+
+        * `busy` - busy
+
+        * `unknown` - unknown
+
+        * `error` - error'
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    TimePriceItem:
+      type: object
+      properties:
+        time_from:
+          type: string
+          description: 'Format: `hh:mm`'
+        time_to:
+          type: string
+          description: 'Format: `hh:mm`'
+        date_from:
+          type: string
+          description: 'Format: `YYYY-MM-DD`'
+        date_to:
+          type: string
+          description: 'Format: `YYYY-MM-DD`'
+        gross_price:
+          type: string
+          description: 'Raw price. No VAT. If TIME-based: is per hour. Example: 12.44 EUR/hour (excl. VAT)'
+        user_facing_price:
+          type: string
+          description: 'Price to display for users. VAT applied. If TIME-based: is per minute.'
+        grace_period_minutes:
+          type: number
+          format: double
+          nullable: true
+          description: Amount of time in minutes after which blocking fees starts to apply
+        tax:
+          type: number
+          format: double
+          description: Tax % applied to the price
+        blocking_cap:
+          type: string
+          nullable: true
+          description: Maximum amount of blocking fees which can be charged in one transaction.
+      required:
+      - blocking_cap
+      - date_from
+      - date_to
+      - grace_period_minutes
+      - gross_price
+      - tax
+      - time_from
+      - time_to
+      - user_facing_price
+    TilesFeatureCollection:
+      type: object
+      properties:
+        type:
+          type: string
+          default: Feature
+        station_id:
+          type: string
+          description: Available only for single-station features
+        cluster_id:
+          type: string
+          description: Available only when the feature represents a cluster of stations
+        geometry:
+          $ref: '#/components/schemas/TilesGeometryPoint'
+        properties:
+          $ref: '#/components/schemas/TilesProperty'
+        custom_properties:
+          $ref: '#/components/schemas/TilesCustomProperties'
+        price_properties:
+          $ref: '#/components/schemas/TilesPriceProperties'
+      required:
+      - geometry
+      - properties
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
+    ConnectAPIEvse:
+      type: object
+      properties:
+        evse_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/ConnectAPIEvseStatusEnum'
+      required:
+      - evse_id
+      - status
+    AmenitiesEnum:
+      enum:
+      - HOTEL
+      - RESTAURANT
+      - CAFE
+      - MALL
+      - SUPERMARKET
+      - SPORT
+      - RECREATION_AREA
+      - NATURE
+      - MUSEUM
+      - BUS_STOP
+      - TAXI_STAND
+      - TRAIN_STATION
+      - AIRPORT
+      - CARPOOL_PARKING
+      - FUEL_STATION
+      - WIFI
+      type: string
+      description: '* `HOTEL` - HOTEL
+
+        * `RESTAURANT` - RESTAURANT
+
+        * `CAFE` - CAFE
+
+        * `MALL` - MALL
+
+        * `SUPERMARKET` - SUPERMARKET
+
+        * `SPORT` - SPORT
+
+        * `RECREATION_AREA` - RECREATION_AREA
+
+        * `NATURE` - NATURE
+
+        * `MUSEUM` - MUSEUM
+
+        * `BUS_STOP` - BUS_STOP
+
+        * `TAXI_STAND` - TAXI_STAND
+
+        * `TRAIN_STATION` - TRAIN_STATION
+
+        * `AIRPORT` - AIRPORT
+
+        * `CARPOOL_PARKING` - CARPOOL_PARKING
+
+        * `FUEL_STATION` - FUEL_STATION
+
+        * `WIFI` - WIFI'
+    ConnectAPIPartnerFilterOperator:
+      type: object
+      description: This class is used to serialize the operators list info
+      properties:
+        name:
+          type: string
+        logo_url:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - logo_url
+      - name
+    TilesProperty:
+      type: object
+      properties:
+        count:
+          type: integer
+        expansion_zoom:
+          type: integer
+        speed:
+          $ref: '#/components/schemas/SpeedEnum'
+        status:
+          $ref: '#/components/schemas/Status80fEnum'
+        operator_id:
+          type: string
+      required:
+      - count
+    TilesPricePropertiesTypeEnum:
+      enum:
+      - charging_price
+      - time_price
+      type: string
+      description: '* `charging_price` - charging_price
+
+        * `time_price` - time_price'
+    ConnectAPIRegularHours:
+      type: object
+      properties:
+        weekday:
+          $ref: '#/components/schemas/WeekdayEnum'
+        period_begin:
+          type: string
+          nullable: true
+        period_end:
+          type: string
+          nullable: true
+      required:
+      - period_begin
+      - period_end
+    ConnectAPIEvseStatusEnum:
+      enum:
+      - AVAILABLE
+      - BLOCKED
+      - CHARGING
+      - INOPERATIVE
+      - OUTOFORDER
+      - PLANNED
+      - REMOVED
+      - RESERVED
+      - UNKNOWN
+      type: string
+      description: '* `AVAILABLE` - AVAILABLE
+
+        * `BLOCKED` - BLOCKED
+
+        * `CHARGING` - CHARGING
+
+        * `INOPERATIVE` - INOPERATIVE
+
+        * `OUTOFORDER` - OUTOFORDER
+
+        * `PLANNED` - PLANNED
+
+        * `REMOVED` - REMOVED
+
+        * `RESERVED` - RESERVED
+
+        * `UNKNOWN` - UNKNOWN'
+    WeekdayEnum:
+      enum:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+      - SUNDAY
+      - ALL
+      type: string
+      description: '* `MONDAY` - MONDAY
+
+        * `TUESDAY` - TUESDAY
+
+        * `WEDNESDAY` - WEDNESDAY
+
+        * `THURSDAY` - THURSDAY
+
+        * `FRIDAY` - FRIDAY
+
+        * `SATURDAY` - SATURDAY
+
+        * `SUNDAY` - SUNDAY
+
+        * `ALL` - ALL'
+    TilesGeometryPoint:
+      type: object
+      properties:
+        type:
+          type: string
+          default: Point
+        coordinates:
+          type: array
+          items:
+            type: string
+          description: Latitude and longitude of the station as a list of floats
+      required:
+      - coordinates
+    ConnectAPIStation:
+      type: object
+      description: Serializer for OCPI station details.
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+        speed:
+          $ref: '#/components/schemas/SpeedEnum'
+        address:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status80fEnum'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        opening_times:
+          $ref: '#/components/schemas/ConnectAPIOpeningTimes'
+        operator:
+          $ref: '#/components/schemas/OCPIOperatorInfo'
+        evses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIEvse'
+        last_updated:
+          type: string
+        amenities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmenitiesEnum'
+        is_partner:
+          type: boolean
+          default: false
+        price_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIPriceGroup'
+        logo_url:
+          type: string
+          format: uri
+      required:
+      - address
+      - coordinates
+      - evses
+      - id
+      - last_updated
+      - name
+      - opening_times
+      - operator
+      - price_groups
+    ConnectAPIOpeningTimes:
+      type: object
+      properties:
+        twentyfourseven:
+          type: boolean
+        regular_hours:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIRegularHours'
+      required:
+      - regular_hours
+      - twentyfourseven
+    SpeedEnum:
+      enum:
+      - slow
+      - fast
+      - turbo
+      type: string
+      description: '* `slow` - slow
+
+        * `fast` - fast
+
+        * `turbo` - turbo'
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: string
+        longitude:
+          type: string
+      required:
+      - latitude
+      - longitude
+    OCPIOperatorInfo:
+      type: object
+      description: "Serializer for OCPI operator information.\n\nAttributes:\n    name (str): The name of the operator (required).\n    contact: Operator's contact information."
+      properties:
+        name:
+          type: string
+        contact:
+          allOf:
+          - $ref: '#/components/schemas/Contact'
+          nullable: true
+      required:
+      - name
+    PaginatedConnectAPIStationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIStation'
+    Contact:
+      type: object
+      properties:
+        phone:
+          type: string
+          nullable: true
+    TilesCustomProperties:
+      type: object
+      properties:
+        is_partner:
+          type: boolean
+      required:
+      - is_partner
+    TilesPriceProperties:
+      type: object
+      properties:
+        price:
+          type: string
+        type:
+          $ref: '#/components/schemas/TilesPricePropertiesTypeEnum'
+        currency:
+          type: string
+      required:
+      - currency
+      - price
+      - type
+    ConnectAPIPriceGroup:
+      type: object
+      description: Serializer for OCPI station details.
+      properties:
+        type:
+          type: string
+        power:
+          type: number
+          format: double
+        evse_ids:
+          type: array
+          items:
+            type: string
+        prices:
+          $ref: '#/components/schemas/ConnectAPIPrices'
+        local_datetime:
+          type: string
+          format: date-time
+        currency:
+          type: string
+        pre_authorization_amount:
+          type: string
+        is_fallback:
+          type: boolean
+          default: false
+          description: Whether this is the price set by Cariqa because no prices from CPOs
+      required:
+      - currency
+      - evse_ids
+      - local_datetime
+      - power
+      - pre_authorization_amount
+      - prices
+      - type
+    ConnectAPITileResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          default: FeatureCollection
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/TilesFeatureCollection'
+      required:
+      - features
+    ConnectAPIPrices:
+      type: object
+      properties:
+        time_price:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'TIME-based price. Example: 0.22 EUR/min'
+        kwh_price:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'KWH-based price. Example: 0.55 eur/kwh'
+        blocking_fee:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'Fees related for the vehicle being overstaying on the charging lot. Time-based. Example: 0.10 EUR/min after 240 min.'
+        session_fee:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'One-off fee for charging. Example: 0.50 EUR'
+        starting_fee:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'One-off fee for charging billed by Cariqa. Example: 0.59 EUR'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.
