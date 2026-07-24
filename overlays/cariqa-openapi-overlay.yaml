@@ -1,0 +1,33 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Cariqa Connect API
+  version: 1.0.0
+extends: openapi/cariqa-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-18'
+    x-apievangelist-provider: cariqa
+    x-apievangelist-category: ev-charging-payments
+    x-apievangelist-artifacts:
+      authentication: authentication/cariqa-authentication.yml
+      conventions: conventions/cariqa-conventions.yml
+      errors: errors/cariqa-problem-types.yml
+      decline_codes: errors/cariqa-decline-codes.yml
+      sandbox: sandbox/cariqa-sandbox.yml
+      data_model: data-model/cariqa-data-model.yml
+      mcp: mcp/cariqa-mcp.yml
+      skills: skills/_index.yml
+- target: $.info
+  update:
+    x-apievangelist-notes: >-
+      Backend-to-backend EV charging payment API. JWT bearer auth (out-of-band
+      tokens). Custom error envelope { detail, error{ type, details } } rather
+      than RFC 9457. Page-number pagination. Payments via Stripe (PSD2/SCA).
+      No documented idempotency-key or rate-limit headers as of enrichment.
+- target: $.servers
+  update:
+    x-apievangelist-environments:
+      production: https://connect.cariqa.com
+      development: https://dev.connect.cariqa.com
+      playground: https://play.connect.cariqa.com

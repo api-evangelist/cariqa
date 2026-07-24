@@ -1,0 +1,51 @@
+# Cariqa Connect API
+
+## Docs
+
+- [Get Billing Details](https://docs.cariqa.com/api-reference/billing-details/get-billing-details.md): Retrieve billing details of the user
+- [Update Billing Details](https://docs.cariqa.com/api-reference/billing-details/update-billing-details.md): Update billing details of the user
+- [Get Charging Session](https://docs.cariqa.com/api-reference/charging-sessions/get-charging-session.md): Retrieve charging session of the user
+- [List Charging Sessions](https://docs.cariqa.com/api-reference/charging-sessions/list-charging-sessions.md): Retrieve list of user charging sessions
+- [Rate charging session](https://docs.cariqa.com/api-reference/charging-sessions/rate-charging-session.md): Rate charging session
+- [Start Charging Session](https://docs.cariqa.com/api-reference/charging-sessions/start-charging-session.md): Start charging session synchronously
+- [Stop Charging Session](https://docs.cariqa.com/api-reference/charging-sessions/stop-charging-session.md): Stop charging session
+- [List Charging Debts](https://docs.cariqa.com/api-reference/debts/list-charging-debts.md): Fetch the list of charging session debts of the user
+- [List invoices of the user](https://docs.cariqa.com/api-reference/invoices/list-invoices-of-the-user.md): List invoices of the user
+- [Delete Payment Method](https://docs.cariqa.com/api-reference/payments/delete-payment-method.md): Remove payment methods from the user
+- [Get Setup Intent](https://docs.cariqa.com/api-reference/payments/get-setup-intent.md): Retrieve client secret which is used in payment method creation
+- [List Payment Methods](https://docs.cariqa.com/api-reference/payments/list-payment-methods.md): Retrieve list of user payment methods
+- [Set Payment Method as Default](https://docs.cariqa.com/api-reference/payments/set-payment-method-as-default.md): Set payment method as default
+- [Get Map Tile](https://docs.cariqa.com/api-reference/stations/get-map-tile.md): Fetch tile
+- [Get Station Details](https://docs.cariqa.com/api-reference/stations/get-station-details.md): Retrieve station details
+- [Get Stations Around](https://docs.cariqa.com/api-reference/stations/get-stations-around.md): List stations around
+- [Partners list](https://docs.cariqa.com/api-reference/stations/partners-list.md): Retrieve the list of partner names to use it for filtering
+- [Create User](https://docs.cariqa.com/api-reference/users/create-user.md): Create user
+- [Get User](https://docs.cariqa.com/api-reference/users/get-user.md): Retrieve user
+- [List Users](https://docs.cariqa.com/api-reference/users/list-users.md): Retrieve list of the users
+- [Soft-delete User](https://docs.cariqa.com/api-reference/users/soft-delete-user.md): Soft-delete user
+- [Update User](https://docs.cariqa.com/api-reference/users/update-user.md): Update user
+- [Authentication](https://docs.cariqa.com/authentication.md): Token-based authentication for the Cariqa Connect API
+- [Changelog](https://docs.cariqa.com/changelog.md): Changelog of all notable changes made to the Cariqa Connect API over time organized by version and date.
+- [End-to-end example](https://docs.cariqa.com/complete-examples.md): An end-to-end flow, from user registration to charging completion.
+- [Country-Specific Requirements](https://docs.cariqa.com/country-specific-requirements.md): Additional requirements that apply in specific countries
+- [Environments and Testing](https://docs.cariqa.com/environments-and-testing.md): Learn how Cariqa Connect API environments work and what to expect when testing charging sessions in development.
+- [Overview](https://docs.cariqa.com/getting-started.md): Quick guide to the Cariqa Connect API
+- [What is Cariqa Connect API](https://docs.cariqa.com/introduction.md): Cariqa Connect API is a backend-to-backend API that enables OEMs, mobility services and platforms to seamlessly offer EV charging through a single API integration, unlocking direct charge point operator prices for their end users while removing operational complexity and ensuring full regulatory com…
+- [MCP server](https://docs.cariqa.com/mcp-server.md)
+- [Billing Details](https://docs.cariqa.com/patterns-billing.md): Usage patterns for billing and account type management
+- [Charging Sessions](https://docs.cariqa.com/patterns-charging.md): Usage patterns for retrieving charging session data and history
+- [Invoices](https://docs.cariqa.com/patterns-invoices.md): Usage patterns for retrieving user invoices
+- [Payment Methods](https://docs.cariqa.com/patterns-payments.md): Usage patterns for Stripe payment method management
+- [Outstanding payments](https://docs.cariqa.com/patterns-payments-outstanding.md)
+- [Station Discovery](https://docs.cariqa.com/patterns-stations.md): Usage patterns for station discovery and visualization endpoints
+- [User Management](https://docs.cariqa.com/patterns-users.md): Usage patterns for user management endpoints
+- [Payments Frontend Setup](https://docs.cariqa.com/payments-frontend-setup.md)
+- [Quick Start](https://docs.cariqa.com/quickstart.md)
+- [Start Charging Error Handling](https://docs.cariqa.com/start-charging-errors-handling.md): Error handling reference for the Connect API start charging flow.
+- [Stop Charging Error Handling](https://docs.cariqa.com/stop-charging-errors-handling.md): Error handling reference for the Connect API stop charging flow.
+- [Development mode](https://docs.cariqa.com/test-payments.md)
+- [Troubleshooting](https://docs.cariqa.com/troubleshooting.md)
+
+## OpenAPI Specs
+
+- [openapi](https://docs.cariqa.com/openapi.yaml)

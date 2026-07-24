@@ -1,0 +1,57 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/cariqa-openapi-original.yml
+docs: https://docs.cariqa.com
+summary: >-
+  Cross-cutting request/response conventions for the Cariqa Connect API, derived
+  from the OpenAPI and the developer docs. Backend-to-backend REST over HTTPS.
+authentication:
+  style: http-bearer
+  token_format: JWT
+  header: Authorization
+  detail: authentication/cariqa-authentication.yml
+base_paths:
+  production: https://connect.cariqa.com
+  development: https://dev.connect.cariqa.com
+  api_prefix: /api/v1
+versioning:
+  scheme: uri-path
+  current: v1
+  example: /api/v1/...
+  detail: lifecycle/cariqa-lifecycle.yml
+pagination:
+  style: page-number
+  request_params:
+  - page
+  response_fields:
+  - count
+  - next
+  - previous
+  - results
+  notes: List endpoints return a paginated envelope with count and absolute next/previous URLs.
+idempotency:
+  supported: false
+  notes: >-
+    The published docs and OpenAPI do not define an idempotency-key header or
+    parameter. Start-charging guards against duplicate sessions server-side via
+    the `already_charging` (409) conflict rather than a client idempotency key.
+error_envelope:
+  shape: custom
+  fields:
+    detail: Human-readable summary of the error.
+    error:
+      type: One of a fixed ErrorTypeEnum (e.g. already_charging, pre_authorization_failed).
+      details: Additional context about the error.
+      payment_intent_client_secret: Present only when additional card (SCA) authentication is required.
+  simple_shape: '{ "detail": "..." }'
+  rich_shape: '{ "detail": "...", "error": { "type": "...", "details": "...", "payment_intent_client_secret": "pi_..." } }'
+  detail: errors/cariqa-problem-types.yml
+rate_limiting:
+  documented: false
+  notes: No public rate-limit policy or rate-limit response headers are documented.
+tracing:
+  request_id_header: null
+  notes: Unexpected 500 errors may embed a support code (UUID) inside `error.details`.
+environments:
+  detail: sandbox/cariqa-sandbox.yml
+  separation: Credentials are environment-specific; DEV uses fake payments/charging, PROD is live.

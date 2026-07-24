@@ -1,0 +1,44 @@
+generated: '2026-07-18'
+method: derived
+source:
+- openapi/cariqa-openapi-original.yml
+- https://docs.cariqa.com/introduction
+- https://docs.cariqa.com/payments-frontend-setup
+standards:
+- id: oauth2
+  conforms: false
+  evidence: Authentication is JWT bearer tokens issued out-of-band, not OAuth 2.0 flows.
+- id: oidc
+  conforms: false
+- id: jwt-bearer
+  conforms: true
+  evidence: OpenAPI securityScheme BearerAuth is http/bearer with bearerFormat JWT.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom { detail, error{ type, details } } envelope, not application/problem+json.
+- id: pagination
+  conforms: true
+  evidence: List endpoints return a page-number envelope (count, next, previous, results).
+- id: idempotency
+  conforms: false
+  evidence: No idempotency-key header/parameter documented.
+- id: psd2-sca
+  conforms: true
+  evidence: >-
+    Docs state payments are processed via Stripe and are PSD2 compliant, with
+    Strong Customer Authentication surfaced via payment_intent_client_secret.
+- id: pci-dss
+  conforms: true
+  evidence: >-
+    Card data is collected and handled by Stripe (client-side SDK / payment
+    sheet); Cariqa does not receive raw card numbers. PCI posture is inherited
+    from Stripe, not independently certified by Cariqa.
+- id: ocpi
+  conforms: partial
+  evidence: >-
+    Station and operator schemas reference OCPI operator info (OCPIOperatorInfo,
+    EVSE IDs in OCPI format), indicating OCPI-aligned charging data upstream.
+notes: >-
+  Derived assertion of cross-cutting standards. Cariqa publishes PSD2/SCA
+  regulatory compliance for payments but no independent certification program
+  (SOC 2 / ISO 27001) was found; no Compliance pointer is emitted.

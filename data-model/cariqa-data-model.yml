@@ -1,0 +1,88 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cariqa-openapi-original.yml
+description: >-
+  Entity-relationship graph derived from the Cariqa Connect API OpenAPI schemas
+  and URL structure. The User is the root aggregate; charging, billing, payment
+  and invoice resources are nested under a user. Stations are a separate,
+  read-only discovery domain.
+entities:
+- name: User
+  schema: ConnectAPIUser
+  path: /api/v1/users/{user_id}/
+  id_field: user_id
+  description: An end user (driver) managed backend-to-backend by the integrating platform.
+- name: BillingDetails
+  schema: ConnectAPIBillingDetails
+  path: /api/v1/users/{user_id}/billing-details/
+  description: Billing profile and account type for a user (used for invoicing/payment).
+- name: PaymentMethod
+  schema: ConnectAPIPM
+  path: /api/v1/users/{user_id}/payment-methods/{pm}/
+  description: A Stripe-backed payment method (card, etc.) attached to a user.
+- name: SetupIntent
+  schema: ConnectAPISetupIntent
+  path: /api/v1/users/{user_id}/setup-intents/
+  description: Stripe setup intent client secret used to add a payment method.
+- name: ChargingSession
+  schema: ConnectAPIChargingSession
+  path: /api/v1/users/{user_id}/charging-sessions/{session_id}/
+  id_field: session_id
+  description: A charging session started/stopped against an EVSE; yields a CDR.
+- name: Debt
+  schema: ConnectAPIDebt
+  path: /api/v1/users/{user_id}/charging/debts/
+  description: An outstanding unpaid charging amount for a user.
+- name: Invoice
+  schema: ConnectAPIInvoiceList
+  path: /api/v1/users/{user_id}/invoices/
+  description: An invoice generated for a user's charging.
+- name: Station
+  schema: ConnectAPIStation
+  path: /api/v1/stations/details/
+  description: A charging location with one or more EVSEs, prices and opening times.
+- name: Evse
+  schema: ConnectAPIEvse
+  id_field: evse_id
+  description: An individual charging point (EVSE) at a station, identified by an OCPI EVSE ID.
+relationships:
+- from: User
+  to: BillingDetails
+  type: has_one
+  via: user_id
+- from: User
+  to: PaymentMethod
+  type: has_many
+  via: user_id
+- from: User
+  to: SetupIntent
+  type: has_many
+  via: user_id
+- from: User
+  to: ChargingSession
+  type: has_many
+  via: user_id
+- from: User
+  to: Debt
+  type: has_many
+  via: user_id
+- from: User
+  to: Invoice
+  type: has_many
+  via: user_id
+- from: ChargingSession
+  to: User
+  type: belongs_to
+  via: user_id
+- from: ChargingSession
+  to: Evse
+  type: belongs_to
+  via: evse_id
+- from: Station
+  to: Evse
+  type: has_many
+  via: evses
+- from: Evse
+  to: Station
+  type: belongs_to
+  via: station

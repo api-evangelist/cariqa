@@ -1,0 +1,123 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cariqa-openapi-original.yml
+enriched_from:
+- https://docs.cariqa.com/start-charging-errors-handling
+- https://docs.cariqa.com/stop-charging-errors-handling
+- https://docs.cariqa.com/troubleshooting
+format: custom
+envelope:
+  simple: '{ "detail": "message" }'
+  rich: '{ "detail": "message", "error": { "type": "<ErrorTypeEnum>", "details": "message", "payment_intent_client_secret": "pi_..." } }'
+  notes: >-
+    Cariqa uses a custom error envelope (not RFC 9457 application/problem+json).
+    The optional `error.type` is drawn from a fixed ErrorTypeEnum.
+status_codes:
+- status: 400
+  title: Bad Request / Validation error
+  meaning: The request payload or query parameters failed validation.
+  seen_on:
+  - stations_around_list
+  - stations_details_retrieve
+  - users_create
+  - users_partial_update
+  - users_billing_details_update
+- status: 401
+  title: Unauthorized
+  meaning: The Authorization header is missing or malformed.
+  remediation: "Add a valid `Authorization: Bearer <token>` header."
+- status: 402
+  title: Payment Required
+  meaning: A payment-related action must be completed before proceeding (outstanding debt or failed pre-authorization).
+  seen_on:
+  - users_charging_start_create
+  - users_payment_methods_destroy
+  - users_destroy
+- status: 403
+  title: Forbidden
+  meaning: The provided token is invalid or expired.
+  remediation: Verify the token value; contact Cariqa support if it should be valid.
+- status: 404
+  title: Not Found
+  meaning: The requested resource (user, session, station or EVSE) was not found or is not accessible in the caller's scope.
+- status: 409
+  title: Conflict
+  meaning: The request is valid but conflicts with current state (session already active/stopped, billing data required, connector out of order).
+  seen_on:
+  - users_charging_start_create
+  - users_charging_stop_create
+- status: 423
+  title: Locked
+  meaning: The resource is temporarily locked.
+  seen_on:
+  - stations_partners_list
+- status: 424
+  title: Failed Dependency
+  meaning: An external dependency (station data provider or charging provider) was unavailable or rejected the operation.
+  seen_on:
+  - users_charging_start_create
+  - users_charging_stop_create
+- status: 500
+  title: Internal Server Error
+  meaning: An unexpected internal error occurred. A support code (UUID) may be embedded in error.details.
+  seen_on:
+  - users_charging_start_create
+  - users_charging_stop_create
+problems:
+- type: validation_error
+  http_status: 400
+  title: Validation error
+- type: already_charging
+  http_status: 409
+  title: Already charging
+  details: User already has an active charging session or a start request is already being processed.
+  remediation: Refresh the active session state; do not retry in a loop.
+  source_operation: users_charging_start_create
+- type: billing_data_required
+  http_status: 409
+  title: Billing data required
+  details: Billing profile is missing, incomplete, or improperly configured.
+  remediation: Ask the customer to complete/update billing data before retrying.
+  source_operation: users_charging_start_create
+- type: station_availability_issue
+  http_status: [409, 424]
+  title: Station availability issue
+  details: The connector is out of order (409) or station data could not be fetched/validated (424).
+  remediation: Choose another connector or retry later after refreshing station details.
+  source_operation: users_charging_start_create
+- type: payment_error
+  http_status: 402
+  title: Payment error
+  details: An outstanding unpaid session must be settled before starting a new one.
+  remediation: Redirect the customer to the outstanding-payments flow.
+  source_operation: users_charging_start_create
+- type: pre_authorization_failed
+  http_status: 402
+  title: Pre-authorization failed
+  details: The payment method could not be pre-authorized before starting charging; may include payment_intent_client_secret for SCA.
+  remediation: If payment_intent_client_secret is present, complete customer authentication, then retry; otherwise choose another payment method.
+  source_operation: users_charging_start_create
+- type: charging_provider_error
+  http_status: 424
+  title: Charging provider error
+  details: The external charging provider did not successfully start or stop the session.
+  remediation: Do not assume the session changed state; refresh and retry after a delay.
+  source_operation: [users_charging_start_create, users_charging_stop_create]
+- type: already_stopped
+  http_status: 409
+  title: Already stopped
+  details: The charging session is already inactive or has already been stopped.
+  remediation: Treat the session as stopped client-side; refresh details.
+  source_operation: users_charging_stop_create
+- type: unexpected_error
+  http_status: 500
+  title: Unexpected error
+  details: An unexpected internal error occurred; may include a support code UUID.
+  remediation: Retry later; capture and provide the support code if present.
+  source_operation: [users_charging_start_create, users_charging_stop_create]
+- type: payment_method_error
+  http_status: 400
+  title: Payment method error
+- type: temporary_locked
+  http_status: 423
+  title: Temporarily locked

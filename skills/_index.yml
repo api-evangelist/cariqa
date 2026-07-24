@@ -1,0 +1,30 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/cariqa-openapi-original.yml
+skills:
+- file: cariqa-onboard-user-and-payment.md
+  name: Onboard a user and attach a payment method
+  api: openapi/cariqa-openapi-original.yml
+  operations:
+  - users_create
+  - users_billing_details_update
+  - users_setup_intents_retrieve
+  - users_payment_methods_list
+  - users_payment_methods_default_create
+- file: cariqa-start-and-stop-charging.md
+  name: Start and stop a charging session
+  api: openapi/cariqa-openapi-original.yml
+  operations:
+  - stations_around_list
+  - stations_details_retrieve
+  - users_charging_start_create
+  - users_charging_sessions_retrieve
+  - users_charging_stop_create
+- file: cariqa-discover-stations.md
+  name: Discover charging stations near a location
+  api: openapi/cariqa-openapi-original.yml
+  operations:
+  - stations_around_list
+  - stations_details_retrieve
+  - stations_partners_list
+  - stations_tile_retrieve

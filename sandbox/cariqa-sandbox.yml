@@ -1,0 +1,65 @@
+generated: '2026-07-18'
+method: searched
+source:
+- https://docs.cariqa.com/environments-and-testing
+- https://docs.cariqa.com/test-payments
+- https://docs.cariqa.com/payments-frontend-setup
+description: >-
+  Cariqa Connect API separates development and production into fully isolated
+  environments with environment-specific credentials. Development uses fake
+  payments and fake charging (via Virtual Charging Points) so integrations can be
+  validated end-to-end without live infrastructure or real financial transactions.
+environments:
+- name: development
+  purpose: Integration and testing
+  base_url: https://dev.connect.cariqa.com/
+  payments: fake
+  ev_charging: fake
+  locations_data: real + fake
+- name: production
+  purpose: Real-life charging
+  base_url: https://connect.cariqa.com/
+  payments: real
+  ev_charging: real
+  locations_data: real
+credentials:
+  environment_specific: true
+  notes: Development credentials do not work in production and vice versa; tokens are issued by Cariqa during onboarding.
+playground:
+  url: https://play.connect.cariqa.com
+  description: No-code Connect API Playground to explore every supported use case; requires API keys.
+reference_client:
+  repo: https://github.com/Cariqa/connect-playground
+  language: Dart
+  description: Official Playground Reference Client demonstrating embedding EV charging.
+test_payment_cards:
+  provider: Stripe
+  notes: In development mode, real cards are automatically replaced with a Stripe test card.
+  values:
+  - method: Apple Pay / Google Pay (dev mode)
+    behavior: Real cards are automatically replaced with a test card ending in 4242.
+  - method: Credit Card (dev mode)
+    behavior: No additional setup beyond client-side SDK initialization; Stripe ensures no real charges are made.
+  platform_notes:
+  - Apple Pay (mobile) requires specifying your Apple Merchant ID in the app code.
+  - Apple Pay / Google Pay (web) require sharing your website domain with the Cariqa team for registration.
+virtual_charging_points:
+  description: Development uses Virtual Charging Points (VCPs) to test charging session flows.
+  types:
+  - name: Shared VCP without progress updates
+    behavior: Tests start/stop/final-CDR lifecycle; no progress (kWh) updates. Shared across partners, so start may fail as busy. Can be used to simulate busy-station behavior.
+    example_evse_ids:
+    - DE*CIQ*EWBNHHLM82TLA*1
+    - IT*PWY*EP0078*01*02
+    - DEQRMEF7GRC21
+    - AT*VIE*E2334770022*2
+  - name: VCP with progress updates
+    behavior: Sends up to 10 hard-coded progress messages with increasing consumed kWh, then a final CDR. Cannot test busy-station scenarios.
+    example_evse_ids:
+    - DE*PWA*EALP22541X01617*01
+    - DE*2GO*EMCD1520*1B*3
+    - DE*EUL*EAUT0002*01
+    - AT*HTB*EOCPI1*1
+warnings:
+- Shared VCPs are used by multiple partners — stop test sessions as soon as possible to avoid blocking others.
+- Progress messages for the progress-update VCP are hard-coded and may continue arriving even after a stop request.

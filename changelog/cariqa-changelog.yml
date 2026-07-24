@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.cariqa.com/changelog
+scheme: semver
+current_version: 1.0.0
+entries:
+- version: 1.0.0
+  date: '2026-06-09'
+  breaking: false
+  additions:
+  - Public release of Connect API v1.0.0
+  highlights:
+  - First public release of the Cariqa Connect API.
+notes: >-
+  The provider maintains a dated changelog organized by version. Only the recent
+  window is captured here; the live changelog at the source URL is authoritative.

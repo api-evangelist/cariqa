@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: searched
+source: live probes of /.well-known/ on Cariqa hosts
+hosts:
+- host: https://cariqa.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://docs.cariqa.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /openapi.yaml
+    status: 200
+    note: Full Connect API OpenAPI 3.0.3 (not under /.well-known, listed for discovery)
+  - path: /llms.txt
+    status: 200
+    note: llms.txt documentation index
+  - path: /mcp
+    status: 200
+    note: Hosted MCP server endpoint
+- host: https://connect.cariqa.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+notes: >-
+  No RFC 9116 security.txt, OIDC discovery, or OAuth authorization-server
+  metadata is published. Recorded absence is valid data. The provider does
+  publish machine-readable discovery via /openapi.yaml, /llms.txt and an MCP
+  endpoint on the docs host.

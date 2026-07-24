@@ -1,0 +1,2423 @@
+openapi: 3.0.3
+info:
+  title: Cariqa Connect API
+  version: 1.0.0 (v1)
+  description: OPENAPI schema of the Cariqa Connect API
+paths:
+  /api/v1/stations/around/:
+    get:
+      operationId: stations_around_list
+      description: List stations around
+      summary: Get Stations Around
+      parameters:
+        - in: query
+          name: connector_types
+          schema:
+            type: array
+            items:
+              enum:
+                - CHADEMO
+                - DOMESTIC_A
+                - DOMESTIC_B
+                - DOMESTIC_C
+                - DOMESTIC_D
+                - DOMESTIC_E
+                - DOMESTIC_F
+                - DOMESTIC_G
+                - DOMESTIC_H
+                - DOMESTIC_I
+                - DOMESTIC_J
+                - DOMESTIC_K
+                - DOMESTIC_L
+                - IEC_60309_2_single_16
+                - IEC_60309_2_three_16
+                - IEC_60309_2_three_32
+                - IEC_60309_2_three_64
+                - IEC_62196_T1
+                - IEC_62196_T1_COMBO
+                - IEC_62196_T2
+                - IEC_62196_T2_COMBO
+                - IEC_62196_T3A
+                - IEC_62196_T3C
+                - TESLA_R
+                - TESLA_S
+              type: string
+              description: |-
+                * `CHADEMO` - CHADEMO
+                * `DOMESTIC_A` - DOMESTIC_A
+                * `DOMESTIC_B` - DOMESTIC_B
+                * `DOMESTIC_C` - DOMESTIC_C
+                * `DOMESTIC_D` - DOMESTIC_D
+                * `DOMESTIC_E` - DOMESTIC_E
+                * `DOMESTIC_F` - DOMESTIC_F
+                * `DOMESTIC_G` - DOMESTIC_G
+                * `DOMESTIC_H` - DOMESTIC_H
+                * `DOMESTIC_I` - DOMESTIC_I
+                * `DOMESTIC_J` - DOMESTIC_J
+                * `DOMESTIC_K` - DOMESTIC_K
+                * `DOMESTIC_L` - DOMESTIC_L
+                * `IEC_60309_2_single_16` - IEC_60309_2_single_16
+                * `IEC_60309_2_three_16` - IEC_60309_2_three_16
+                * `IEC_60309_2_three_32` - IEC_60309_2_three_32
+                * `IEC_60309_2_three_64` - IEC_60309_2_three_64
+                * `IEC_62196_T1` - IEC_62196_T1
+                * `IEC_62196_T1_COMBO` - IEC_62196_T1_COMBO
+                * `IEC_62196_T2` - IEC_62196_T2
+                * `IEC_62196_T2_COMBO` - IEC_62196_T2_COMBO
+                * `IEC_62196_T3A` - IEC_62196_T3A
+                * `IEC_62196_T3C` - IEC_62196_T3C
+                * `TESLA_R` - TESLA_R
+                * `TESLA_S` - TESLA_S
+          description: List of connector types to filter stations
+        - in: query
+          name: distance
+          schema:
+            type: integer
+            default: 100
+          description: Radius to search stations (in meters).
+        - in: query
+          name: latitude
+          schema:
+            type: number
+            format: double
+          description: Latitude of the center of the search area.
+          required: true
+        - in: query
+          name: longitude
+          schema:
+            type: number
+            format: double
+          description: Longitude of the center of the search area.
+          required: true
+        - in: query
+          name: only_available
+          schema:
+            type: boolean
+            default: false
+          description: Whether to show only available stations
+        - in: query
+          name: only_partners
+          schema:
+            type: boolean
+            default: false
+          description: Whether to show only partner stations
+        - in: query
+          name: operators
+          schema:
+            type: array
+            items:
+              type: string
+          description: List of partner operator names to filter stations
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+        - name: page_size
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+      tags:
+        - Stations
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIStationList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/stations/details/:
+    get:
+      operationId: stations_details_retrieve
+      description: Retrieve station details
+      summary: Get Station Details
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+            minLength: 1
+          required: true
+        - in: query
+          name: type
+          schema:
+            enum:
+              - evse_id
+              - station_id
+            type: string
+            minLength: 1
+          description: |-
+            * `evse_id` - evse_id
+            * `station_id` - station_id
+          required: true
+      tags:
+        - Stations
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIStation'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/stations/partners/:
+    get:
+      operationId: stations_partners_list
+      description: Retrieve the list of partner names to use it for filtering
+      summary: Partners list
+      tags:
+        - Stations
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectAPIPartnerFilterOperator'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '423':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+  /api/v1/stations/tile/:
+    get:
+      operationId: stations_tile_retrieve
+      description: Fetch tile
+      summary: Get Map Tile
+      parameters:
+        - in: query
+          name: connector_types
+          schema:
+            type: array
+            items:
+              enum:
+                - CHADEMO
+                - DOMESTIC_A
+                - DOMESTIC_B
+                - DOMESTIC_C
+                - DOMESTIC_D
+                - DOMESTIC_E
+                - DOMESTIC_F
+                - DOMESTIC_G
+                - DOMESTIC_H
+                - DOMESTIC_I
+                - DOMESTIC_J
+                - DOMESTIC_K
+                - DOMESTIC_L
+                - IEC_60309_2_single_16
+                - IEC_60309_2_three_16
+                - IEC_60309_2_three_32
+                - IEC_60309_2_three_64
+                - IEC_62196_T1
+                - IEC_62196_T1_COMBO
+                - IEC_62196_T2
+                - IEC_62196_T2_COMBO
+                - IEC_62196_T3A
+                - IEC_62196_T3C
+                - TESLA_R
+                - TESLA_S
+              type: string
+              description: |-
+                * `CHADEMO` - CHADEMO
+                * `DOMESTIC_A` - DOMESTIC_A
+                * `DOMESTIC_B` - DOMESTIC_B
+                * `DOMESTIC_C` - DOMESTIC_C
+                * `DOMESTIC_D` - DOMESTIC_D
+                * `DOMESTIC_E` - DOMESTIC_E
+                * `DOMESTIC_F` - DOMESTIC_F
+                * `DOMESTIC_G` - DOMESTIC_G
+                * `DOMESTIC_H` - DOMESTIC_H
+                * `DOMESTIC_I` - DOMESTIC_I
+                * `DOMESTIC_J` - DOMESTIC_J
+                * `DOMESTIC_K` - DOMESTIC_K
+                * `DOMESTIC_L` - DOMESTIC_L
+                * `IEC_60309_2_single_16` - IEC_60309_2_single_16
+                * `IEC_60309_2_three_16` - IEC_60309_2_three_16
+                * `IEC_60309_2_three_32` - IEC_60309_2_three_32
+                * `IEC_60309_2_three_64` - IEC_60309_2_three_64
+                * `IEC_62196_T1` - IEC_62196_T1
+                * `IEC_62196_T1_COMBO` - IEC_62196_T1_COMBO
+                * `IEC_62196_T2` - IEC_62196_T2
+                * `IEC_62196_T2_COMBO` - IEC_62196_T2_COMBO
+                * `IEC_62196_T3A` - IEC_62196_T3A
+                * `IEC_62196_T3C` - IEC_62196_T3C
+                * `TESLA_R` - TESLA_R
+                * `TESLA_S` - TESLA_S
+          description: List of connector types to filter stations
+        - in: query
+          name: max_price
+          schema:
+            type: number
+            format: double
+          description: Filter out stations with price higher than this
+        - in: query
+          name: only_available
+          schema:
+            type: boolean
+            default: false
+          description: Whether to show only available stations
+        - in: query
+          name: only_partners
+          schema:
+            type: boolean
+            default: false
+          description: Whether to show only partner stations
+        - in: query
+          name: operators
+          schema:
+            type: array
+            items:
+              type: string
+          description: List of partner operator names to filter stations
+        - in: query
+          name: power_groups
+          schema:
+            type: array
+            items:
+              enum:
+                - slow
+                - fast
+                - turbo
+              type: string
+              description: |-
+                * `slow` - slow
+                * `fast` - fast
+                * `turbo` - turbo
+          description: List of power groups to filter stations
+        - in: query
+          name: x
+          schema:
+            type: array
+            items:
+              type: integer
+          description: Identifies the X coordinates of the tile in the grid
+          required: true
+        - in: query
+          name: 'y'
+          schema:
+            type: array
+            items:
+              type: integer
+          description: Identifies the Y coordinates of the tile in the grid
+          required: true
+        - in: query
+          name: z
+          schema:
+            type: integer
+          description: Zoom level
+          required: true
+      tags:
+        - Stations
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPITileResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/:
+    get:
+      operationId: users_list
+      description: Retrieve list of the users
+      summary: List Users
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+        - name: page_size
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - name: search
+          required: false
+          in: query
+          description: 'Search user by: id, external_id'
+          schema:
+            type: string
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIUserList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    post:
+      operationId: users_create
+      description: Create user
+      summary: Create User
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIUser'
+      security:
+        - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIUser'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/:
+    get:
+      operationId: users_retrieve
+      description: Retrieve user
+      summary: Get User
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIUser'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: Update user
+      summary: Update User
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIUser'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIUser'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    delete:
+      operationId: users_destroy
+      description: Soft-delete user
+      summary: Soft-delete User
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/billing-details/:
+    get:
+      operationId: users_billing_details_retrieve
+      description: Retrieve billing details of the user
+      summary: Get Billing Details
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Billing Details
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    put:
+      operationId: users_billing_details_update
+      description: Update billing details of the user
+      summary: Update Billing Details
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Billing Details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIBillingDetails'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIBillingDetails'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/charging-sessions/:
+    get:
+      operationId: users_charging_sessions_list
+      description: Retrieve list of user charging sessions
+      summary: List Charging Sessions
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+        - name: page_size
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Charging Sessions
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIChargingSessionList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/charging-sessions/{session_id}/:
+    get:
+      operationId: users_charging_sessions_retrieve
+      description: Retrieve charging session of the user
+      summary: Get Charging Session
+      parameters:
+        - in: path
+          name: session_id
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Charging Sessions
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIChargingSession'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+    patch:
+      operationId: users_charging_sessions_partial_update
+      description: Rate charging session
+      summary: Rate charging session
+      parameters:
+        - in: path
+          name: session_id
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Charging Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIChargingSession'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIChargingSession'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedConnectAPIChargingSession'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIChargingSession'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/charging/debts/:
+    get:
+      operationId: users_charging_debts_list
+      description: Fetch the list of charging session debts of the user
+      summary: List Charging Debts
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+        - name: page_size
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Debts
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIDebtList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/charging/start/:
+    post:
+      operationId: users_charging_start_create
+      description: Start charging session synchronously
+      summary: Start Charging Session
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Charging Sessions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIStartChargingRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIStartChargingRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConnectAPIStartChargingRequest'
+        required: true
+      security:
+        - BearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPIChargingSession'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+  /api/v1/users/{user_id}/charging/stop/{session_id}/:
+    post:
+      operationId: users_charging_stop_create
+      description: Stop charging session
+      summary: Stop Charging Session
+      parameters:
+        - in: path
+          name: session_id
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Charging Sessions
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '424':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+  /api/v1/users/{user_id}/invoices/:
+    get:
+      operationId: users_invoices_list
+      description: List invoices of the user
+      summary: List invoices of the user
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+        - name: page_size
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Invoices
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIInvoiceListList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/payment-methods/:
+    get:
+      operationId: users_payment_methods_list
+      description: Retrieve list of user payment methods
+      summary: List Payment Methods
+      parameters:
+        - name: page
+          required: false
+          in: query
+          description: A page number within the paginated result set.
+          schema:
+            type: integer
+        - name: page_size
+          required: false
+          in: query
+          description: Number of results to return per page.
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Payments
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConnectAPIPMList'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/payment-methods/{pm}/:
+    delete:
+      operationId: users_payment_methods_destroy
+      description: Remove payment methods from the user
+      summary: Delete Payment Method
+      parameters:
+        - in: path
+          name: pm
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Payments
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '402':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/payment-methods/{pm}/default/:
+    post:
+      operationId: users_payment_methods_default_create
+      description: Set payment method as default
+      summary: Set Payment Method as Default
+      parameters:
+        - in: path
+          name: pm
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Payments
+      security:
+        - BearerAuth: []
+      responses:
+        '204':
+          description: No response body
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+  /api/v1/users/{user_id}/setup-intents/:
+    get:
+      operationId: users_setup_intents_retrieve
+      description: Retrieve client secret which is used in payment method creation
+      summary: Get Setup Intent
+      parameters:
+        - in: query
+          name: pm_type
+          schema:
+            enum:
+              - card
+            type: string
+            default: card
+            minLength: 1
+          description: '* `card` - card'
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+      tags:
+        - Payments
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectAPISetupIntent'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Detail'
+          description: ''
+components:
+  schemas:
+    AccountTypeEnum:
+      enum:
+        - personal
+        - business
+      type: string
+      description: |-
+        * `personal` - personal
+        * `business` - business
+    AmenitiesEnum:
+      enum:
+        - HOTEL
+        - RESTAURANT
+        - CAFE
+        - MALL
+        - SUPERMARKET
+        - SPORT
+        - RECREATION_AREA
+        - NATURE
+        - MUSEUM
+        - BUS_STOP
+        - TAXI_STAND
+        - TRAIN_STATION
+        - AIRPORT
+        - CARPOOL_PARKING
+        - FUEL_STATION
+        - WIFI
+      type: string
+      description: |-
+        * `HOTEL` - HOTEL
+        * `RESTAURANT` - RESTAURANT
+        * `CAFE` - CAFE
+        * `MALL` - MALL
+        * `SUPERMARKET` - SUPERMARKET
+        * `SPORT` - SPORT
+        * `RECREATION_AREA` - RECREATION_AREA
+        * `NATURE` - NATURE
+        * `MUSEUM` - MUSEUM
+        * `BUS_STOP` - BUS_STOP
+        * `TAXI_STAND` - TAXI_STAND
+        * `TRAIN_STATION` - TRAIN_STATION
+        * `AIRPORT` - AIRPORT
+        * `CARPOOL_PARKING` - CARPOOL_PARKING
+        * `FUEL_STATION` - FUEL_STATION
+        * `WIFI` - WIFI
+    ConnectAPIBillingDetails:
+      type: object
+      description: |-
+        Serializer which is used to serialize data with the possible business
+        details if exist
+      properties:
+        country:
+          type: string
+          nullable: true
+          maxLength: 150
+        city:
+          type: string
+          nullable: true
+          maxLength: 50
+        tax_id:
+          type: string
+          nullable: true
+          maxLength: 30
+        account_type:
+          $ref: '#/components/schemas/AccountTypeEnum'
+        company_name:
+          type: string
+          nullable: true
+        vat_id:
+          type: string
+          nullable: true
+        line1:
+          type: string
+        postal_code:
+          type: string
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 150
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 150
+      required:
+        - line1
+        - postal_code
+    ConnectAPICardPM:
+      type: object
+      properties:
+        brand:
+          type: string
+          description: 'Card brand. Example: visa'
+        last4:
+          type: string
+          description: Last 4 digits of the card number
+        expiration_date:
+          type: string
+          description: 'Expiration date of the card. Format: MM/YY'
+        cardholder_name:
+          type: string
+          nullable: true
+          description: Cardholder name, if present
+      required:
+        - brand
+        - cardholder_name
+        - expiration_date
+        - last4
+    ConnectAPIChargingSession:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        start_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        end_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        duration:
+          type: integer
+          readOnly: true
+          nullable: true
+        consumed_energy:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,3})?$
+          readOnly: true
+          nullable: true
+        is_active:
+          type: boolean
+          readOnly: true
+        evse_id:
+          type: string
+          readOnly: true
+        station_info:
+          allOf:
+            - $ref: '#/components/schemas/StationInfo'
+          readOnly: true
+        is_partner:
+          type: boolean
+          readOnly: true
+        logo_url:
+          type: string
+          nullable: true
+          description: Return station's operator logo url.
+          readOnly: true
+        user_facing_session_prices:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPIUserFacingSessionPrices'
+          readOnly: true
+        session_cost:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPIPAYGSummary'
+          readOnly: true
+        rates:
+          nullable: true
+          minimum: 0
+          maximum: 32767
+          oneOf:
+            - $ref: '#/components/schemas/RatesEnum'
+            - $ref: '#/components/schemas/NullEnum'
+      required:
+        - consumed_energy
+        - duration
+        - end_time
+        - evse_id
+        - id
+        - is_active
+        - is_partner
+        - logo_url
+        - session_cost
+        - start_time
+        - station_info
+        - user_facing_session_prices
+    ConnectAPIDebt:
+      type: object
+      properties:
+        session_id:
+          type: string
+          description: Unique identifier of the charging session
+        payment_intent_client_secret:
+          type: string
+          description: Stripe Client Secret which should be used to pay the debt
+        amount:
+          type: string
+          description: Amount of the debt to charge
+        currency:
+          type: string
+          description: '3-letter currency of the debt (Example: EUR)'
+      required:
+        - amount
+        - currency
+        - payment_intent_client_secret
+        - session_id
+    ConnectAPIEvse:
+      type: object
+      properties:
+        evse_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/ConnectAPIEvseStatusEnum'
+      required:
+        - evse_id
+        - status
+    ConnectAPIEvseStatusEnum:
+      enum:
+        - AVAILABLE
+        - BLOCKED
+        - CHARGING
+        - INOPERATIVE
+        - OUTOFORDER
+        - PLANNED
+        - REMOVED
+        - RESERVED
+        - UNKNOWN
+      type: string
+      description: |-
+        * `AVAILABLE` - AVAILABLE
+        * `BLOCKED` - BLOCKED
+        * `CHARGING` - CHARGING
+        * `INOPERATIVE` - INOPERATIVE
+        * `OUTOFORDER` - OUTOFORDER
+        * `PLANNED` - PLANNED
+        * `REMOVED` - REMOVED
+        * `RESERVED` - RESERVED
+        * `UNKNOWN` - UNKNOWN
+    ConnectAPIInvoiceList:
+      type: object
+      description: |-
+        Extended invoice list serializer (payg flow should have session id).
+
+        :param charging_session_id: Id of the corresponding charging session.
+      properties:
+        link:
+          type: string
+          description: Link to download the invoice
+        total:
+          type: string
+          description: Total amount of the invoice
+        date:
+          type: string
+          format: date-time
+          description: Date of the invoice
+        refund:
+          type: boolean
+          description: Whether the invoice has been refunded
+        charging_session_id:
+          type: string
+          nullable: true
+          description: Unique identifier of the charging session
+        currency:
+          type: string
+          description: Currency used for billing
+      required:
+        - currency
+        - date
+        - link
+        - refund
+        - total
+    ConnectAPIOpeningTimes:
+      type: object
+      properties:
+        twentyfourseven:
+          type: boolean
+        regular_hours:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIRegularHours'
+      required:
+        - regular_hours
+        - twentyfourseven
+    ConnectAPIPAYGSummary:
+      type: object
+      description: PAYG summary serializer.
+      properties:
+        kwh_cost:
+          type: string
+          nullable: true
+          description: KWH-based part of the charging session cost
+        time_cost:
+          type: string
+          nullable: true
+          description: TIME-based part of the charging session cost
+        session_fee_cost:
+          type: string
+          nullable: true
+          description: One-off session fee as a part of the charging session cost
+        blocking_fee_cost:
+          type: string
+          nullable: true
+          description: Blocking fee cost as a part of the charging session cost
+        starting_fee_cost:
+          type: string
+          nullable: true
+          description: One-off Cariqa fee as a part of the charging session cost
+        invoice_download:
+          type: string
+          nullable: true
+          description: URL to download the invoice
+          readOnly: true
+        invoice_vat:
+          type: string
+          description: VAT applied to the invoice
+        invoice_summary:
+          type: string
+          description: Summary of the invoice
+        invoice_credits:
+          type: string
+          description: >-
+            Credits applied to the invoice. Has negative value in case discount
+            applied. Rarely can have positive value
+        invoice_discount:
+          type: string
+          description: Discount applied to the invoice
+        currency:
+          type: string
+          readOnly: true
+          description: Currency used for billing
+      required:
+        - blocking_fee_cost
+        - currency
+        - invoice_credits
+        - invoice_discount
+        - invoice_download
+        - invoice_summary
+        - invoice_vat
+        - kwh_cost
+        - session_fee_cost
+        - starting_fee_cost
+        - time_cost
+    ConnectAPIPM:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the payment method given by Stripe
+        default:
+          type: boolean
+          description: Whether this is the default payment method for the user
+        type:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPIPMTypeEnum'
+          description: |-
+            Type of the payment method. Example: card
+
+            * `card` - card
+            * `apple_pay` - apple_pay
+            * `google_pay` - google_pay
+        card:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPICardPM'
+          description: Payment method details
+        created_at:
+          type: string
+          description: Timestamp of when the payment method was attached to the user
+      required:
+        - card
+        - created_at
+        - default
+        - id
+        - type
+    ConnectAPIPMTypeEnum:
+      enum:
+        - card
+        - apple_pay
+        - google_pay
+      type: string
+      description: |-
+        * `card` - card
+        * `apple_pay` - apple_pay
+        * `google_pay` - google_pay
+    ConnectAPIPartnerFilterOperator:
+      type: object
+      description: This class is used to serialize the operators list info
+      properties:
+        name:
+          type: string
+        logo_url:
+          type: string
+          format: uri
+          nullable: true
+      required:
+        - logo_url
+        - name
+    ConnectAPIPriceGroup:
+      type: object
+      description: Serializer for OCPI station details.
+      properties:
+        type:
+          type: string
+        power:
+          type: number
+          format: double
+        evse_ids:
+          type: array
+          items:
+            type: string
+        prices:
+          $ref: '#/components/schemas/ConnectAPIPrices'
+        local_datetime:
+          type: string
+          format: date-time
+        currency:
+          type: string
+        pre_authorization_amount:
+          type: string
+        is_fallback:
+          type: boolean
+          default: false
+          description: Whether this is the price set by Cariqa because no prices from CPOs
+      required:
+        - currency
+        - evse_ids
+        - local_datetime
+        - power
+        - pre_authorization_amount
+        - prices
+        - type
+    ConnectAPIPrices:
+      type: object
+      properties:
+        time_price:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'TIME-based price. Example: 0.22 EUR/min'
+        kwh_price:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'KWH-based price. Example: 0.55 eur/kwh'
+        blocking_fee:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: >-
+            Fees related for the vehicle being overstaying on the charging lot.
+            Time-based. Example: 0.10 EUR/min after 240 min.
+        session_fee:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'One-off fee for charging. Example: 0.50 EUR'
+        starting_fee:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          nullable: true
+          description: 'One-off fee for charging billed by Cariqa. Example: 0.59 EUR'
+    ConnectAPIRegularHours:
+      type: object
+      properties:
+        weekday:
+          $ref: '#/components/schemas/WeekdayEnum'
+        period_begin:
+          type: string
+          nullable: true
+        period_end:
+          type: string
+          nullable: true
+      required:
+        - period_begin
+        - period_end
+    ConnectAPISetupIntent:
+      type: object
+      properties:
+        setup_intent_client_secret:
+          type: string
+      required:
+        - setup_intent_client_secret
+    ConnectAPIStartChargingRequest:
+      type: object
+      description: |-
+        Start charge request serializer.
+
+        :param evse_id: Evse id of the station to charge at.
+        :param payment_method_id: Stripe id of the payment method
+         which should be used for PAYG.
+        :param car_id: Id of the car to charge.
+      properties:
+        evse_id:
+          type: string
+        payment_method_id:
+          type: string
+      required:
+        - evse_id
+        - payment_method_id
+    ConnectAPIStation:
+      type: object
+      description: Serializer for OCPI station details.
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+        speed:
+          $ref: '#/components/schemas/SpeedEnum'
+        address:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status80fEnum'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        opening_times:
+          $ref: '#/components/schemas/ConnectAPIOpeningTimes'
+        operator:
+          $ref: '#/components/schemas/OCPIOperatorInfo'
+        evses:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIEvse'
+        last_updated:
+          type: string
+        amenities:
+          type: array
+          items:
+            $ref: '#/components/schemas/AmenitiesEnum'
+        is_partner:
+          type: boolean
+          default: false
+        price_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIPriceGroup'
+        logo_url:
+          type: string
+          format: uri
+      required:
+        - address
+        - coordinates
+        - evses
+        - id
+        - last_updated
+        - name
+        - opening_times
+        - operator
+        - price_groups
+    ConnectAPITileResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          default: FeatureCollection
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/TilesFeatureCollection'
+      required:
+        - features
+    ConnectAPIUser:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        custom_properties:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
+          nullable: true
+      required:
+        - id
+    ConnectAPIUserCustomProperties:
+      type: object
+      properties:
+        external_id:
+          type: string
+          nullable: true
+          description: External id of the user provided by Connect backend
+          maxLength: 250
+    ConnectAPIUserFacingSessionPrices:
+      type: object
+      properties:
+        kwh_price:
+          type: string
+          nullable: true
+          readOnly: true
+          description: KWH-based price applied to session and used for billing
+        time_price:
+          type: string
+          nullable: true
+          readOnly: true
+          description: TIME-based price applied to session and used for billing
+        session_fee:
+          type: string
+          nullable: true
+          readOnly: true
+          description: One-off fee applied to session and used for billing
+        blocking_fee:
+          type: string
+          nullable: true
+          readOnly: true
+          description: >-
+            Merged info about the blocking fees applied to session and used for
+            billing
+        starting_fee:
+          type: string
+          nullable: true
+          readOnly: true
+          description: One-off Cariqa fee applied to session and used for billing
+        grace_period_minutes:
+          type: integer
+          nullable: true
+          description: Amount of time in minutes after which blocking fees starts to apply
+        blocking_cap:
+          type: string
+          nullable: true
+          description: >-
+            Maximum amount of blocking fees which can be charged in one
+            transaction.
+        currency:
+          type: string
+          maxLength: 3
+      required:
+        - blocking_cap
+        - blocking_fee
+        - grace_period_minutes
+        - kwh_price
+        - session_fee
+        - starting_fee
+        - time_price
+    Contact:
+      type: object
+      properties:
+        phone:
+          type: string
+          nullable: true
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: string
+        longitude:
+          type: string
+      required:
+        - latitude
+        - longitude
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+        - detail
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+            - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: |-
+            Type of the error
+
+            * `validation_error` - validation_error
+            * `payment_method_error` - payment_method_error
+            * `payment_error` - payment_error
+            * `temporary_locked` - temporary_locked
+            * `already_charging` - already_charging
+            * `already_stopped` - already_stopped
+            * `station_availability_issue` - station_availability_issue
+            * `billing_data_required` - billing_data_required
+            * `charging_provider_error` - charging_provider_error
+            * `unexpected_error` - unexpected_error
+            * `pre_authorization_failed` - pre_authorization_failed
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+        - details
+        - type
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+        - detail
+        - error
+    ErrorTypeEnum:
+      enum:
+        - validation_error
+        - payment_method_error
+        - payment_error
+        - temporary_locked
+        - already_charging
+        - already_stopped
+        - station_availability_issue
+        - billing_data_required
+        - charging_provider_error
+        - unexpected_error
+        - pre_authorization_failed
+      type: string
+      description: |-
+        * `validation_error` - validation_error
+        * `payment_method_error` - payment_method_error
+        * `payment_error` - payment_error
+        * `temporary_locked` - temporary_locked
+        * `already_charging` - already_charging
+        * `already_stopped` - already_stopped
+        * `station_availability_issue` - station_availability_issue
+        * `billing_data_required` - billing_data_required
+        * `charging_provider_error` - charging_provider_error
+        * `unexpected_error` - unexpected_error
+        * `pre_authorization_failed` - pre_authorization_failed
+    LocaleEnum:
+      enum:
+        - en
+        - de
+      type: string
+      description: |-
+        * `en` - EN
+        * `de` - DE
+    NullEnum:
+      enum:
+        - null
+    OCPIOperatorInfo:
+      type: object
+      description: |-
+        Serializer for OCPI operator information.
+
+        Attributes:
+            name (str): The name of the operator (required).
+            contact: Operator's contact information.
+      properties:
+        name:
+          type: string
+        contact:
+          allOf:
+            - $ref: '#/components/schemas/Contact'
+          nullable: true
+      required:
+        - name
+    PaginatedConnectAPIChargingSessionList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIChargingSession'
+    PaginatedConnectAPIDebtList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIDebt'
+    PaginatedConnectAPIInvoiceListList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIInvoiceList'
+    PaginatedConnectAPIPMList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIPM'
+    PaginatedConnectAPIStationList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIStation'
+    PaginatedConnectAPIUserList:
+      type: object
+      required:
+        - count
+        - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIUser'
+    PatchedConnectAPIChargingSession:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        start_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        end_time:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        duration:
+          type: integer
+          readOnly: true
+          nullable: true
+        consumed_energy:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,3})?$
+          readOnly: true
+          nullable: true
+        is_active:
+          type: boolean
+          readOnly: true
+        evse_id:
+          type: string
+          readOnly: true
+        station_info:
+          allOf:
+            - $ref: '#/components/schemas/StationInfo'
+          readOnly: true
+        is_partner:
+          type: boolean
+          readOnly: true
+        logo_url:
+          type: string
+          nullable: true
+          description: Return station's operator logo url.
+          readOnly: true
+        user_facing_session_prices:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPIUserFacingSessionPrices'
+          readOnly: true
+        session_cost:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPIPAYGSummary'
+          readOnly: true
+        rates:
+          nullable: true
+          minimum: 0
+          maximum: 32767
+          oneOf:
+            - $ref: '#/components/schemas/RatesEnum'
+            - $ref: '#/components/schemas/NullEnum'
+    PatchedConnectAPIUser:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        custom_properties:
+          allOf:
+            - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
+          nullable: true
+    RatesEnum:
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      type: integer
+      description: |-
+        * `1` - 1
+        * `2` - 2
+        * `3` - 3
+        * `4` - 4
+        * `5` - 5
+    SpeedEnum:
+      enum:
+        - slow
+        - fast
+        - turbo
+      type: string
+      description: |-
+        * `slow` - slow
+        * `fast` - fast
+        * `turbo` - turbo
+    StationInfo:
+      type: object
+      properties:
+        station_name:
+          type: string
+          nullable: true
+          maxLength: 250
+        station_address:
+          type: string
+          nullable: true
+          maxLength: 250
+        country:
+          type: string
+          nullable: true
+          maxLength: 10
+        station_speed:
+          type: string
+          nullable: true
+          maxLength: 100
+        connector_standard:
+          type: string
+          nullable: true
+          maxLength: 40
+        connector_power:
+          type: number
+          format: double
+          nullable: true
+        support_phone:
+          type: string
+          nullable: true
+          maxLength: 30
+        latitude:
+          type: string
+          nullable: true
+          maxLength: 30
+        longitude:
+          type: string
+          nullable: true
+          maxLength: 30
+    Status80fEnum:
+      enum:
+        - free
+        - busy
+        - unknown
+        - error
+      type: string
+      description: |-
+        * `free` - free
+        * `busy` - busy
+        * `unknown` - unknown
+        * `error` - error
+    TilesCustomProperties:
+      type: object
+      properties:
+        is_partner:
+          type: boolean
+      required:
+        - is_partner
+    TilesFeatureCollection:
+      type: object
+      properties:
+        type:
+          type: string
+          default: Feature
+        station_id:
+          type: string
+          description: Available only for single-station features
+        cluster_id:
+          type: string
+          description: Available only when the feature represents a cluster of stations
+        geometry:
+          $ref: '#/components/schemas/TilesGeometryPoint'
+        properties:
+          $ref: '#/components/schemas/TilesProperty'
+        custom_properties:
+          $ref: '#/components/schemas/TilesCustomProperties'
+        price_properties:
+          $ref: '#/components/schemas/TilesPriceProperties'
+      required:
+        - geometry
+        - properties
+    TilesGeometryPoint:
+      type: object
+      properties:
+        type:
+          type: string
+          default: Point
+        coordinates:
+          type: array
+          items:
+            type: string
+          description: Latitude and longitude of the station as a list of floats
+      required:
+        - coordinates
+    TilesPriceProperties:
+      type: object
+      properties:
+        price:
+          type: string
+        type:
+          $ref: '#/components/schemas/TilesPricePropertiesTypeEnum'
+        currency:
+          type: string
+      required:
+        - currency
+        - price
+        - type
+    TilesPricePropertiesTypeEnum:
+      enum:
+        - charging_price
+        - time_price
+      type: string
+      description: |-
+        * `charging_price` - charging_price
+        * `time_price` - time_price
+    TilesProperty:
+      type: object
+      properties:
+        count:
+          type: integer
+        expansion_zoom:
+          type: integer
+        speed:
+          $ref: '#/components/schemas/SpeedEnum'
+        status:
+          $ref: '#/components/schemas/Status80fEnum'
+        operator_id:
+          type: string
+      required:
+        - count
+    TimePriceItem:
+      type: object
+      properties:
+        time_from:
+          type: string
+          description: 'Format: `hh:mm`'
+        time_to:
+          type: string
+          description: 'Format: `hh:mm`'
+        date_from:
+          type: string
+          description: 'Format: `YYYY-MM-DD`'
+        date_to:
+          type: string
+          description: 'Format: `YYYY-MM-DD`'
+        gross_price:
+          type: string
+          description: >-
+            Raw price. No VAT. If TIME-based: is per hour. Example: 12.44
+            EUR/hour (excl. VAT)
+        user_facing_price:
+          type: string
+          description: >-
+            Price to display for users. VAT applied. If TIME-based: is per
+            minute.
+        grace_period_minutes:
+          type: number
+          format: double
+          nullable: true
+          description: Amount of time in minutes after which blocking fees starts to apply
+        tax:
+          type: number
+          format: double
+          description: Tax % applied to the price
+        blocking_cap:
+          type: string
+          nullable: true
+          description: >-
+            Maximum amount of blocking fees which can be charged in one
+            transaction.
+      required:
+        - blocking_cap
+        - date_from
+        - date_to
+        - grace_period_minutes
+        - gross_price
+        - tax
+        - time_from
+        - time_to
+        - user_facing_price
+    WeekdayEnum:
+      enum:
+        - MONDAY
+        - TUESDAY
+        - WEDNESDAY
+        - THURSDAY
+        - FRIDAY
+        - SATURDAY
+        - SUNDAY
+        - ALL
+      type: string
+      description: |-
+        * `MONDAY` - MONDAY
+        * `TUESDAY` - TUESDAY
+        * `WEDNESDAY` - WEDNESDAY
+        * `THURSDAY` - THURSDAY
+        * `FRIDAY` - FRIDAY
+        * `SATURDAY` - SATURDAY
+        * `SUNDAY` - SUNDAY
+        * `ALL` - ALL
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT Authorization header using the Bearer scheme.
+servers:
+  - url: https://connect.cariqa.com
+    description: Connect
+  - url: https://dev.connect.cariqa.com
+    description: Connect Playground

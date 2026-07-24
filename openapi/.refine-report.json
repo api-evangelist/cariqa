@@ -1,0 +1,26 @@
+{
+  "provider": "cariqa",
+  "sources": [
+    "cariqa-billing-details-api-openapi.yml",
+    "cariqa-charging-sessions-api-openapi.yml",
+    "cariqa-debts-api-openapi.yml",
+    "cariqa-invoices-api-openapi.yml",
+    "cariqa-payments-api-openapi.yml",
+    "cariqa-stations-api-openapi.yml",
+    "cariqa-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "cariqa-billing-details-api-openapi.yml",
+    "cariqa-charging-sessions-api-openapi.yml",
+    "cariqa-debts-api-openapi.yml",
+    "cariqa-invoices-api-openapi.yml",
+    "cariqa-payments-api-openapi.yml",
+    "cariqa-stations-api-openapi.yml",
+    "cariqa-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

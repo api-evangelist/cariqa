@@ -1,7 +1,15 @@
 aid: cariqa
 name: Cariqa
-description: Cariqa is a company surfaced as a portfolio company of anthemis, techstars and added to the
-  API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Cariqa provides backend-to-backend payment and access infrastructure for EV
+  charging across Europe. Its Connect API lets OEMs, mobility services, fleets
+  and platforms offer electric-vehicle charging through a single integration —
+  discovering charging stations and live connector availability, creating and
+  managing users, collecting payment methods via Stripe (PSD2/SCA compliant),
+  starting and stopping charging sessions on 900,000+ charge points, and
+  retrieving session history, debts and invoices. Cariqa removes reseller
+  markups so charge point operators set the price drivers pay, while platforms
+  earn a transaction revenue share. Backed by Anthemis and Techstars.
 url: https://raw.githubusercontent.com/api-evangelist/cariqa/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,17 +18,220 @@ x-backed-by:
 - techstars
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
+image: https://cdn.prod.website-files.com/665b067716979bea8b47153d/698ef2f263134d677dd448fd_cariqa-og-home-1200x630-v1.png
 tags:
 - Company
-apis: []
+- EV Charging
+- Electric Vehicles
+- Payments
+- Mobility
+- e-Mobility
+- Charge Point Operator
+- Energy
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: cariqa:cariqa-billing-details-api
+  name: Cariqa Billing Details API
+  description: The Billing Details API from Cariqa — 1 operation(s) for billing details.
+  humanURL: https://docs.cariqa.com
+  baseURL: https://connect.cariqa.com
+  tags:
+  - Billing Details
+  properties:
+  - type: OpenAPI
+    url: openapi/cariqa-billing-details-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cariqa.com
+  - type: APIReference
+    url: https://docs.cariqa.com/api-reference
+  - type: GettingStarted
+    url: https://docs.cariqa.com/getting-started
+  - type: Quickstart
+    url: https://docs.cariqa.com/quickstart
+- aid: cariqa:cariqa-charging-sessions-api
+  name: Cariqa Charging Sessions API
+  description: The Charging Sessions API from Cariqa — 4 operation(s) for charging sessions.
+  humanURL: https://docs.cariqa.com
+  baseURL: https://connect.cariqa.com
+  tags:
+  - Charging Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/cariqa-charging-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cariqa.com
+  - type: APIReference
+    url: https://docs.cariqa.com/api-reference
+  - type: GettingStarted
+    url: https://docs.cariqa.com/getting-started
+  - type: Quickstart
+    url: https://docs.cariqa.com/quickstart
+- aid: cariqa:cariqa-debts-api
+  name: Cariqa Debts API
+  description: The Debts API from Cariqa — 1 operation(s) for debts.
+  humanURL: https://docs.cariqa.com
+  baseURL: https://connect.cariqa.com
+  tags:
+  - Debts
+  properties:
+  - type: OpenAPI
+    url: openapi/cariqa-debts-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cariqa.com
+  - type: APIReference
+    url: https://docs.cariqa.com/api-reference
+  - type: GettingStarted
+    url: https://docs.cariqa.com/getting-started
+  - type: Quickstart
+    url: https://docs.cariqa.com/quickstart
+- aid: cariqa:cariqa-invoices-api
+  name: Cariqa Invoices API
+  description: The Invoices API from Cariqa — 1 operation(s) for invoices.
+  humanURL: https://docs.cariqa.com
+  baseURL: https://connect.cariqa.com
+  tags:
+  - Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/cariqa-invoices-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cariqa.com
+  - type: APIReference
+    url: https://docs.cariqa.com/api-reference
+  - type: GettingStarted
+    url: https://docs.cariqa.com/getting-started
+  - type: Quickstart
+    url: https://docs.cariqa.com/quickstart
+- aid: cariqa:cariqa-payments-api
+  name: Cariqa Payments API
+  description: The Payments API from Cariqa — 4 operation(s) for payments.
+  humanURL: https://docs.cariqa.com
+  baseURL: https://connect.cariqa.com
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/cariqa-payments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cariqa.com
+  - type: APIReference
+    url: https://docs.cariqa.com/api-reference
+  - type: GettingStarted
+    url: https://docs.cariqa.com/getting-started
+  - type: Quickstart
+    url: https://docs.cariqa.com/quickstart
+- aid: cariqa:cariqa-stations-api
+  name: Cariqa Stations API
+  description: The Stations API from Cariqa — 4 operation(s) for stations.
+  humanURL: https://docs.cariqa.com
+  baseURL: https://connect.cariqa.com
+  tags:
+  - Stations
+  properties:
+  - type: OpenAPI
+    url: openapi/cariqa-stations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cariqa.com
+  - type: APIReference
+    url: https://docs.cariqa.com/api-reference
+  - type: GettingStarted
+    url: https://docs.cariqa.com/getting-started
+  - type: Quickstart
+    url: https://docs.cariqa.com/quickstart
+- aid: cariqa:cariqa-users-api
+  name: Cariqa Users API
+  description: The Users API from Cariqa — 2 operation(s) for users.
+  humanURL: https://docs.cariqa.com
+  baseURL: https://connect.cariqa.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/cariqa-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.cariqa.com
+  - type: APIReference
+    url: https://docs.cariqa.com/api-reference
+  - type: GettingStarted
+    url: https://docs.cariqa.com/getting-started
+  - type: Quickstart
+    url: https://docs.cariqa.com/quickstart
 common:
+- type: OpenAPI
+  url: openapi/cariqa-openapi-original.yml
+- type: Overlay
+  url: overlays/cariqa-openapi-overlay.yaml
+- type: Authentication
+  url: authentication/cariqa-authentication.yml
+- type: MCPServer
+  url: mcp/cariqa-mcp.yml
+- type: LLMsTxt
+  url: llms/cariqa-llms.txt
+- type: AgenticAccess
+  url: agentic-access/cariqa-agentic-access.yml
+- type: Conventions
+  url: conventions/cariqa-conventions.yml
+- type: ErrorCatalog
+  url: errors/cariqa-problem-types.yml
+- type: DeclineCodes
+  url: errors/cariqa-decline-codes.yml
+- type: Conformance
+  url: conformance/cariqa-conformance.yml
+- type: Lifecycle
+  url: lifecycle/cariqa-lifecycle.yml
+- type: ChangeLog
+  url: changelog/cariqa-changelog.yml
+- type: DataModel
+  url: data-model/cariqa-data-model.yml
+- type: Sandbox
+  url: sandbox/cariqa-sandbox.yml
+- type: DomainSecurity
+  url: security/cariqa-domain-security.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Documentation
+  url: https://docs.cariqa.com
+- type: DeveloperPortal
+  url: https://docs.cariqa.com
+- type: APIReference
+  url: https://docs.cariqa.com/api-reference
+- type: GettingStarted
+  url: https://docs.cariqa.com/getting-started
+- type: Quickstart
+  url: https://docs.cariqa.com/quickstart
+- type: Support
+  url: https://help.cariqa.com/en/
+- type: Blog
+  url: https://cariqa.com/en/blog
+- type: GitHubOrganization
+  url: https://github.com/Cariqa
+- type: TermsOfService
+  url: https://cariqa.com/en/terms-conditions
+- type: PrivacyPolicy
+  url: https://cariqa.com/en/privacy
 - type: Website
   url: https://cariqa.com/
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

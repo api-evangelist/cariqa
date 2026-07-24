@@ -1,0 +1,39 @@
+generated: '2026-07-18'
+method: searched
+source:
+- https://docs.cariqa.com/start-charging-errors-handling
+- https://docs.cariqa.com/patterns-payments-outstanding
+- openapi/cariqa-openapi-original.yml
+note: >-
+  Cariqa proxies card payments through Stripe (PSD2/SCA compliant). It does not
+  expose raw Stripe card decline_codes; instead payment/authorization failures
+  surface as Cariqa ErrorTypeEnum values on the start-charging and payment flows.
+  This artifact captures that payment-decline surface. It complements — does not
+  replace — errors/cariqa-problem-types.yml.
+envelope_field: error.type
+masked_to_buyer: false
+decline_codes:
+- code: pre_authorization_failed
+  http_status: 402
+  meaning: The customer's payment method could not be pre-authorized before starting charging (declined, invalid, or provider failure).
+  action: If error.payment_intent_client_secret is present, complete SCA authentication and retry; otherwise ask the customer to choose another payment method.
+- code: payment_error
+  http_status: 402
+  meaning: The customer has an outstanding unpaid charging session/payment that must be settled first.
+  action: Redirect to the outstanding-payments flow; do not retry the start until the debt is resolved.
+- code: payment_method_error
+  http_status: 400
+  meaning: The submitted payment method is invalid or could not be processed.
+  action: Ask the customer to re-enter or replace the payment method.
+- code: billing_data_required
+  http_status: 409
+  meaning: Billing data is missing, incomplete, or improperly configured, so payment/invoicing cannot proceed.
+  action: Ask the customer to complete or correct billing details before retrying.
+- code: temporary_locked
+  http_status: 423
+  meaning: The account or resource is temporarily locked.
+  action: Wait and retry later; contact support if it persists.
+sca:
+  supported: true
+  field: error.payment_intent_client_secret
+  notes: A Stripe payment intent client secret is returned when additional card authentication (3DS/SCA) is required to complete pre-authorization.
