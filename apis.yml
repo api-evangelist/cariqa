@@ -177,7 +177,7 @@ apis:
     url: https://docs.cariqa.com/quickstart
 common:
 - type: OpenAPI
-  url: openapi/cariqa-openapi-original.yml
+  url: openapi/_original/cariqa-openapi-original.yml
 - type: Overlay
   url: overlays/cariqa-openapi-overlay.yaml
 - type: Authentication
