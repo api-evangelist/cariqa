@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cariqa Connect Billing Details API",
+    "version": "1.0.0 (v1)"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Billing Details",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Billing Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/billing-details/",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve billing details of the user"
+        },
+        {
+          "info": {
+            "name": "Update Billing Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/billing-details/",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update billing details of the user"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cariqa Connect Billing Details Debts API",
+    "version": "1.0.0 (v1)"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Debts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Charging Debts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/charging/debts/",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "A page number within the paginated result set."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return per page."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch the list of charging session debts of the user"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

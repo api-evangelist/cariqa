@@ -1,0 +1,163 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cariqa Connect Billing Details Charging Sessions API",
+    "version": "1.0.0 (v1)"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Charging Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Charging Sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/charging-sessions/",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "A page number within the paginated result set."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return per page."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve list of user charging sessions"
+        },
+        {
+          "info": {
+            "name": "Get Charging Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/charging-sessions/:session_id/",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve charging session of the user"
+        },
+        {
+          "info": {
+            "name": "Rate charging session",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/charging-sessions/:session_id/",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Rate charging session"
+        },
+        {
+          "info": {
+            "name": "Start Charging Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/charging/start/",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Start charging session synchronously"
+        },
+        {
+          "info": {
+            "name": "Stop Charging Session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/charging/stop/:session_id/",
+            "params": [
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Stop charging session"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

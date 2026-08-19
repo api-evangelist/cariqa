@@ -6,14 +6,17 @@ server:
   name: cariqa-connect
   transport: http
   url: https://docs.cariqa.com/mcp
-  description: >-
-    Official hosted MCP server for the Cariqa Connect API. Gives AI coding agents
-    native access to the entire Connect API knowledge base — documentation, code
-    examples, API reference, and guides. Agents can search across the docs, read
-    specific pages, and explore the full API structure directly from the IDE.
+  description: Official hosted MCP server for the Cariqa Connect API. Gives AI coding agents native access
+    to the entire Connect API knowledge base — documentation, code examples, API reference, and guides.
+    Agents can search across the docs, read specific pages, and explore the full API structure directly
+    from the IDE.
 capabilities:
   scope: documentation-knowledge-base
-  notes: >-
-    This is a documentation MCP server (search/read Connect API docs and
-    reference), not a transactional server that executes charging operations.
+  notes: This is a documentation MCP server (search/read Connect API docs and reference), not a transactional
+    server that executes charging operations.
 docs: https://docs.cariqa.com/mcp-server
+deployment:
+  mode: remote
+  verified: searched
+  checked: '2026-08-12'
+  source: catalog MCP census

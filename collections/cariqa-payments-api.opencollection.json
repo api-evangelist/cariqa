@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cariqa Connect Billing Details Payments API",
+    "version": "1.0.0 (v1)"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Payment Methods",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/payment-methods/",
+            "params": [
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "A page number within the paginated result set."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return per page."
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve list of user payment methods"
+        },
+        {
+          "info": {
+            "name": "Delete Payment Method",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/payment-methods/:pm/",
+            "params": [
+              {
+                "name": "pm",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove payment methods from the user"
+        },
+        {
+          "info": {
+            "name": "Set Payment Method as Default",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/payment-methods/:pm/default/",
+            "params": [
+              {
+                "name": "pm",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Set payment method as default"
+        },
+        {
+          "info": {
+            "name": "Get Setup Intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/users/:user_id/setup-intents/",
+            "params": [
+              {
+                "name": "pm_type",
+                "value": "",
+                "type": "query",
+                "description": "* `card` - card"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve client secret which is used in payment method creation"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

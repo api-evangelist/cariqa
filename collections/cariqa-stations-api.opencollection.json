@@ -1,0 +1,203 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cariqa Connect Billing Details Stations API",
+    "version": "1.0.0 (v1)"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Stations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Stations Around",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/stations/around/",
+            "params": [
+              {
+                "name": "connector_types",
+                "value": "",
+                "type": "query",
+                "description": "List of connector types to filter stations"
+              },
+              {
+                "name": "distance",
+                "value": "",
+                "type": "query",
+                "description": "Radius to search stations (in meters)."
+              },
+              {
+                "name": "latitude",
+                "value": "",
+                "type": "query",
+                "description": "Latitude of the center of the search area."
+              },
+              {
+                "name": "longitude",
+                "value": "",
+                "type": "query",
+                "description": "Longitude of the center of the search area."
+              },
+              {
+                "name": "only_available",
+                "value": "",
+                "type": "query",
+                "description": "Whether to show only available stations"
+              },
+              {
+                "name": "only_partners",
+                "value": "",
+                "type": "query",
+                "description": "Whether to show only partner stations"
+              },
+              {
+                "name": "operators",
+                "value": "",
+                "type": "query",
+                "description": "List of partner operator names to filter stations"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "A page number within the paginated result set."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to return per page."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List stations around"
+        },
+        {
+          "info": {
+            "name": "Get Station Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/stations/details/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "* `evse_id` - evse_id\n* `station_id` - station_id"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve station details"
+        },
+        {
+          "info": {
+            "name": "Partners list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/stations/partners/",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve the list of partner names to use it for filtering"
+        },
+        {
+          "info": {
+            "name": "Get Map Tile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://connect.cariqa.com/api/v1/stations/tile/",
+            "params": [
+              {
+                "name": "connector_types",
+                "value": "",
+                "type": "query",
+                "description": "List of connector types to filter stations"
+              },
+              {
+                "name": "max_price",
+                "value": "",
+                "type": "query",
+                "description": "Filter out stations with price higher than this"
+              },
+              {
+                "name": "only_available",
+                "value": "",
+                "type": "query",
+                "description": "Whether to show only available stations"
+              },
+              {
+                "name": "only_partners",
+                "value": "",
+                "type": "query",
+                "description": "Whether to show only partner stations"
+              },
+              {
+                "name": "operators",
+                "value": "",
+                "type": "query",
+                "description": "List of partner operator names to filter stations"
+              },
+              {
+                "name": "power_groups",
+                "value": "",
+                "type": "query",
+                "description": "List of power groups to filter stations"
+              },
+              {
+                "name": "x",
+                "value": "",
+                "type": "query",
+                "description": "Identifies the X coordinates of the tile in the grid"
+              },
+              {
+                "name": "y",
+                "value": "",
+                "type": "query",
+                "description": "Identifies the Y coordinates of the tile in the grid"
+              },
+              {
+                "name": "z",
+                "value": "",
+                "type": "query",
+                "description": "Zoom level"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch tile"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
