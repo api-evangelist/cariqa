@@ -40,6 +40,15 @@ tags:
 - Electric Vehicles
 - Payments
 - Mobility
+- E-Mobility
+- Charge Point Operator
+- Energy
+tags_raw:
+- Company
+- EV Charging
+- Electric Vehicles
+- Payments
+- Mobility
 - e-Mobility
 - Charge Point Operator
 - Energy
@@ -163,6 +172,8 @@ apis:
   humanURL: https://docs.cariqa.com
   baseURL: https://connect.cariqa.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
