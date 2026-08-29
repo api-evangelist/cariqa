@@ -199,6 +199,9 @@ apis:
   - type: Quickstart
     url: https://docs.cariqa.com/quickstart
 common:
+- type: CapabilityMap
+  url: capabilities/cariqa-capability-edges.yml
+  name: Cariqa Business Capability Map
 - type: OpenAPI
   url: openapi/_original/cariqa-openapi-original.yml
 - type: Overlay

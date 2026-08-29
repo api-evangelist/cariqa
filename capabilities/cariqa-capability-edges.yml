@@ -1,0 +1,48 @@
+slug: cariqa
+provider: Cariqa
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Automotive & Mobility
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Charging Sessions
+  spec_file: cariqa-charging-sessions-api-openapi.yml
+  capability_id: BC-3480.20
+  capability_id_l1: BC-3480
+  capability_name: Charge Point Operations
+  confidence: 0.75
+  evidence: POST /api/v1/users/{user_id}/charging/start/  Start Charging Session; POST .../charging/stop/{session_id}/  Stop
+    Charging Session
+  reason: Operations create, monitor, terminate and rate charging sessions — the session lifecycle explicitly
+    named in Charge Point Operations. Some ambiguity because the surface is the e-mobility service provider
+    side rather than the charge point operator, but the capability family is clearly EV charging network
+    operations.
+- tag: Invoices
+  spec_file: cariqa-invoices-api-openapi.yml
+  capability_id: BC-3480.50
+  capability_id_l1: BC-3480
+  capability_name: Charging Billing and Settlement
+  confidence: 0.75
+  evidence: GET /api/v1/users/{user_id}/invoices/  List invoices of the user; schema ConnectAPIInvoiceList
+  reason: Invoices issued to charging customers for their sessions, matching 'Billing of charge sessions
+    ... and receipt management for charging customers'. Clear billing capability within the EV charging
+    domain.
+- tag: Users
+  spec_file: cariqa-users-api-openapi.yml
+  capability_id: BC-3480.40
+  capability_id_l1: BC-3480
+  capability_name: Charging Customer and Subscription Management
+  confidence: 0.7
+  evidence: POST /api/v1/users/  Create User; DELETE /api/v1/users/{user_id}/  Soft-delete User; schema
+    ConnectAPIUser
+  reason: Lifecycle of end-customer accounts for a charging service, matching 'Customer onboarding, subscription
+    plans, and authentication for charging services'. Generic CRM is a possible alternative reading, but
+    the vendor context scopes these users to EV charging customers.
