@@ -1,13 +1,7 @@
 {
   "provider": "cariqa",
   "sources": [
-    "cariqa-billing-details-api-openapi.yml",
-    "cariqa-charging-sessions-api-openapi.yml",
-    "cariqa-debts-api-openapi.yml",
-    "cariqa-invoices-api-openapi.yml",
-    "cariqa-payments-api-openapi.yml",
-    "cariqa-stations-api-openapi.yml",
-    "cariqa-users-api-openapi.yml"
+    "_original/cariqa-openapi-original.yml"
   ],
   "outputs": [
     "cariqa-billing-details-api-openapi.yml",
@@ -21,6 +15,25 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "cariqa-openapi-original.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "cariqa-openapi-original.yml: declared missing tag: Billing Details",
+    "cariqa-openapi-original.yml: declared missing tag: Charging Sessions",
+    "cariqa-openapi-original.yml: declared missing tag: Debts",
+    "cariqa-openapi-original.yml: declared missing tag: Invoices",
+    "cariqa-openapi-original.yml: declared missing tag: Payments",
+    "cariqa-openapi-original.yml: declared missing tag: Stations",
+    "cariqa-openapi-original.yml: declared missing tag: Users",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "cariqa-billing-details-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cariqa-charging-sessions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cariqa-debts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cariqa-invoices-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cariqa-payments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cariqa-stations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cariqa-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

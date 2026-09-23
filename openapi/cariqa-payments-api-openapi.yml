@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Cariqa Connect Billing Details Payments API
+  title: Cariqa Connect Payments API
   version: 1.0.0 (v1)
   description: OPENAPI schema of the Cariqa Connect API
 servers:
@@ -190,36 +190,36 @@ paths:
           description: ''
 components:
   schemas:
-    PaginatedConnectAPIPMList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIPM'
-    ConnectAPISetupIntent:
+    ConnectAPICardPM:
       type: object
       properties:
-        setup_intent_client_secret:
+        brand:
+          type: string
+          description: 'Card brand. Example: visa'
+        last4:
+          type: string
+          description: Last 4 digits of the card number
+        expiration_date:
+          type: string
+          description: 'Expiration date of the card. Format: MM/YY'
+        cardholder_name:
+          type:
+          - string
+          - 'null'
+          description: Cardholder name, if present
+      required:
+      - brand
+      - cardholder_name
+      - expiration_date
+      - last4
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
           type: string
       required:
-      - setup_intent_client_secret
+      - detail
     ConnectAPIPMTypeEnum:
       enum:
       - card
@@ -231,92 +231,31 @@ components:
         * `apple_pay` - apple_pay
 
         * `google_pay` - google_pay'
-    ErrorDetail:
+    PaginatedConnectAPIPMList:
       type: object
-      properties:
-        detail:
-          type: string
-        error:
-          $ref: '#/components/schemas/Error'
       required:
-      - detail
-      - error
-    ConnectAPIPM:
-      type: object
+      - count
+      - results
       properties:
-        id:
-          type: string
-          description: Unique identifier for the payment method given by Stripe
-        default:
-          type: boolean
-          description: Whether this is the default payment method for the user
-        type:
-          allOf:
-          - $ref: '#/components/schemas/ConnectAPIPMTypeEnum'
-          description: 'Type of the payment method. Example: card
-
-
-            * `card` - card
-
-            * `apple_pay` - apple_pay
-
-            * `google_pay` - google_pay'
-        card:
-          allOf:
-          - $ref: '#/components/schemas/ConnectAPICardPM'
-          description: Payment method details
-        created_at:
-          type: string
-          description: Timestamp of when the payment method was attached to the user
-      required:
-      - card
-      - created_at
-      - default
-      - id
-      - type
-    ErrorTypeEnum:
-      enum:
-      - validation_error
-      - payment_method_error
-      - payment_error
-      - temporary_locked
-      - already_charging
-      - already_stopped
-      - station_availability_issue
-      - billing_data_required
-      - charging_provider_error
-      - unexpected_error
-      - pre_authorization_failed
-      type: string
-      description: '* `validation_error` - validation_error
-
-        * `payment_method_error` - payment_method_error
-
-        * `payment_error` - payment_error
-
-        * `temporary_locked` - temporary_locked
-
-        * `already_charging` - already_charging
-
-        * `already_stopped` - already_stopped
-
-        * `station_availability_issue` - station_availability_issue
-
-        * `billing_data_required` - billing_data_required
-
-        * `charging_provider_error` - charging_provider_error
-
-        * `unexpected_error` - unexpected_error
-
-        * `pre_authorization_failed` - pre_authorization_failed'
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIPM'
     Error:
       type: object
       properties:
@@ -356,27 +295,91 @@ components:
       required:
       - details
       - type
-    ConnectAPICardPM:
+    ConnectAPIPM:
       type: object
       properties:
-        brand:
+        id:
           type: string
-          description: 'Card brand. Example: visa'
-        last4:
+          description: Unique identifier for the payment method given by Stripe
+        default:
+          type: boolean
+          description: Whether this is the default payment method for the user
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIPMTypeEnum'
+          description: 'Type of the payment method. Example: card
+
+
+            * `card` - card
+
+            * `apple_pay` - apple_pay
+
+            * `google_pay` - google_pay'
+        card:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPICardPM'
+          description: Payment method details
+        created_at:
           type: string
-          description: Last 4 digits of the card number
-        expiration_date:
-          type: string
-          description: 'Expiration date of the card. Format: MM/YY'
-        cardholder_name:
-          type: string
-          nullable: true
-          description: Cardholder name, if present
+          description: Timestamp of when the payment method was attached to the user
       required:
-      - brand
-      - cardholder_name
-      - expiration_date
-      - last4
+      - card
+      - created_at
+      - default
+      - id
+      - type
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    ConnectAPISetupIntent:
+      type: object
+      properties:
+        setup_intent_client_secret:
+          type: string
+      required:
+      - setup_intent_client_secret
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
   securitySchemes:
     BearerAuth:
       type: http

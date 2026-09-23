@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Cariqa Connect Billing Details Users API
+  title: Cariqa Connect Users API
   version: 1.0.0 (v1)
   description: OPENAPI schema of the Cariqa Connect API
 servers:
@@ -217,55 +217,6 @@ paths:
           description: ''
 components:
   schemas:
-    ErrorDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - detail
-      - error
-    PatchedConnectAPIUser:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        email:
-          type: string
-          format: email
-          nullable: true
-        locale:
-          $ref: '#/components/schemas/LocaleEnum'
-        custom_properties:
-          allOf:
-          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
-          nullable: true
-    PaginatedConnectAPIUserList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIUser'
     LocaleEnum:
       enum:
       - en
@@ -274,41 +225,6 @@ components:
       description: '* `en` - EN
 
         * `de` - DE'
-    ErrorTypeEnum:
-      enum:
-      - validation_error
-      - payment_method_error
-      - payment_error
-      - temporary_locked
-      - already_charging
-      - already_stopped
-      - station_availability_issue
-      - billing_data_required
-      - charging_provider_error
-      - unexpected_error
-      - pre_authorization_failed
-      type: string
-      description: '* `validation_error` - validation_error
-
-        * `payment_method_error` - payment_method_error
-
-        * `payment_error` - payment_error
-
-        * `temporary_locked` - temporary_locked
-
-        * `already_charging` - already_charging
-
-        * `already_stopped` - already_stopped
-
-        * `station_availability_issue` - station_availability_issue
-
-        * `billing_data_required` - billing_data_required
-
-        * `charging_provider_error` - charging_provider_error
-
-        * `unexpected_error` - unexpected_error
-
-        * `pre_authorization_failed` - pre_authorization_failed'
     Detail:
       type: object
       description: 400 status error message response serializer.
@@ -356,14 +272,6 @@ components:
       required:
       - details
       - type
-    ConnectAPIUserCustomProperties:
-      type: object
-      properties:
-        external_id:
-          type: string
-          nullable: true
-          description: External id of the user provided by Connect backend
-          maxLength: 250
     ConnectAPIUser:
       type: object
       properties:
@@ -371,17 +279,112 @@ components:
           type: string
           readOnly: true
         email:
-          type: string
+          type:
+          - string
+          - 'null'
           format: email
-          nullable: true
         locale:
           $ref: '#/components/schemas/LocaleEnum'
         custom_properties:
           allOf:
           - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
-          nullable: true
       required:
       - id
+    PatchedConnectAPIUser:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        custom_properties:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
+    PaginatedConnectAPIUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIUser'
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    ConnectAPIUserCustomProperties:
+      type: object
+      properties:
+        external_id:
+          type:
+          - string
+          - 'null'
+          description: External id of the user provided by Connect backend
+          maxLength: 250
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
   securitySchemes:
     BearerAuth:
       type: http

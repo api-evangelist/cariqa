@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Cariqa Connect Billing Details Invoices API
+  title: Cariqa Connect Invoices API
   version: 1.0.0 (v1)
   description: OPENAPI schema of the Cariqa Connect API
 servers:
@@ -14,7 +14,6 @@ paths:
   /api/v1/users/{user_id}/invoices/:
     get:
       operationId: users_invoices_list
-      description: List invoices of the user
       summary: List invoices of the user
       parameters:
       - name: page
@@ -59,37 +58,6 @@ paths:
           description: ''
 components:
   schemas:
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    PaginatedConnectAPIInvoiceListList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIInvoiceList'
     ConnectAPIInvoiceList:
       type: object
       description: 'Extended invoice list serializer (payg flow should have session id).
@@ -111,8 +79,9 @@ components:
           type: boolean
           description: Whether the invoice has been refunded
         charging_session_id:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           description: Unique identifier of the charging session
         currency:
           type: string
@@ -123,6 +92,39 @@ components:
       - link
       - refund
       - total
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    PaginatedConnectAPIInvoiceListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIInvoiceList'
   securitySchemes:
     BearerAuth:
       type: http
