@@ -217,79 +217,6 @@ paths:
           description: ''
 components:
   schemas:
-    LocaleEnum:
-      enum:
-      - en
-      - de
-      type: string
-      description: '* `en` - EN
-
-        * `de` - DE'
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    Error:
-      type: object
-      properties:
-        type:
-          allOf:
-          - $ref: '#/components/schemas/ErrorTypeEnum'
-          description: 'Type of the error
-
-
-            * `validation_error` - validation_error
-
-            * `payment_method_error` - payment_method_error
-
-            * `payment_error` - payment_error
-
-            * `temporary_locked` - temporary_locked
-
-            * `already_charging` - already_charging
-
-            * `already_stopped` - already_stopped
-
-            * `station_availability_issue` - station_availability_issue
-
-            * `billing_data_required` - billing_data_required
-
-            * `charging_provider_error` - charging_provider_error
-
-            * `unexpected_error` - unexpected_error
-
-            * `pre_authorization_failed` - pre_authorization_failed'
-        details:
-          type: string
-          description: Additional details about the error
-        payment_intent_client_secret:
-          type: string
-          description: Client secret of the payment intent that failed
-      required:
-      - details
-      - type
-    ConnectAPIUser:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        email:
-          type:
-          - string
-          - 'null'
-          format: email
-        locale:
-          $ref: '#/components/schemas/LocaleEnum'
-        custom_properties:
-          allOf:
-          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
-      required:
-      - id
     PatchedConnectAPIUser:
       type: object
       properties:
@@ -350,6 +277,14 @@ components:
           - 'null'
           description: External id of the user provided by Connect backend
           maxLength: 250
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
     ErrorTypeEnum:
       enum:
       - validation_error
@@ -385,6 +320,71 @@ components:
         * `unexpected_error` - unexpected_error
 
         * `pre_authorization_failed` - pre_authorization_failed'
+    ConnectAPIUser:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        custom_properties:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
+      required:
+      - id
+    LocaleEnum:
+      enum:
+      - en
+      - de
+      type: string
+      description: '* `en` - EN
+
+        * `de` - DE'
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
   securitySchemes:
     BearerAuth:
       type: http

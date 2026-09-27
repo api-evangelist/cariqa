@@ -98,98 +98,6 @@ paths:
           description: ''
 components:
   schemas:
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    Error:
-      type: object
-      properties:
-        type:
-          allOf:
-          - $ref: '#/components/schemas/ErrorTypeEnum'
-          description: 'Type of the error
-
-
-            * `validation_error` - validation_error
-
-            * `payment_method_error` - payment_method_error
-
-            * `payment_error` - payment_error
-
-            * `temporary_locked` - temporary_locked
-
-            * `already_charging` - already_charging
-
-            * `already_stopped` - already_stopped
-
-            * `station_availability_issue` - station_availability_issue
-
-            * `billing_data_required` - billing_data_required
-
-            * `charging_provider_error` - charging_provider_error
-
-            * `unexpected_error` - unexpected_error
-
-            * `pre_authorization_failed` - pre_authorization_failed'
-        details:
-          type: string
-          description: Additional details about the error
-        payment_intent_client_secret:
-          type: string
-          description: Client secret of the payment intent that failed
-      required:
-      - details
-      - type
-    ErrorDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - detail
-      - error
-    ErrorTypeEnum:
-      enum:
-      - validation_error
-      - payment_method_error
-      - payment_error
-      - temporary_locked
-      - already_charging
-      - already_stopped
-      - station_availability_issue
-      - billing_data_required
-      - charging_provider_error
-      - unexpected_error
-      - pre_authorization_failed
-      type: string
-      description: '* `validation_error` - validation_error
-
-        * `payment_method_error` - payment_method_error
-
-        * `payment_error` - payment_error
-
-        * `temporary_locked` - temporary_locked
-
-        * `already_charging` - already_charging
-
-        * `already_stopped` - already_stopped
-
-        * `station_availability_issue` - station_availability_issue
-
-        * `billing_data_required` - billing_data_required
-
-        * `charging_provider_error` - charging_provider_error
-
-        * `unexpected_error` - unexpected_error
-
-        * `pre_authorization_failed` - pre_authorization_failed'
     AccountTypeEnum:
       enum:
       - personal
@@ -246,6 +154,98 @@ components:
       required:
       - line1
       - postal_code
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
   securitySchemes:
     BearerAuth:
       type: http

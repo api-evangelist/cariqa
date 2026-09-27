@@ -444,19 +444,29 @@ paths:
           description: ''
 components:
   schemas:
-    TilesPriceProperties:
+    TilesFeatureCollection:
       type: object
       properties:
-        price:
-          type: string
         type:
-          $ref: '#/components/schemas/TilesPricePropertiesTypeEnum'
-        currency:
           type: string
+          default: Feature
+        station_id:
+          type: string
+          description: Available only for single-station features
+        cluster_id:
+          type: string
+          description: Available only when the feature represents a cluster of stations
+        geometry:
+          $ref: '#/components/schemas/TilesGeometryPoint'
+        properties:
+          $ref: '#/components/schemas/TilesProperty'
+        custom_properties:
+          $ref: '#/components/schemas/TilesCustomProperties'
+        price_properties:
+          $ref: '#/components/schemas/TilesPriceProperties'
       required:
-      - currency
-      - price
-      - type
+      - geometry
+      - properties
     TilesCustomProperties:
       type: object
       properties:
@@ -464,179 +474,18 @@ components:
           type: boolean
       required:
       - is_partner
-    TilesPricePropertiesTypeEnum:
-      enum:
-      - charging_price
-      - time_price
-      type: string
-      description: '* `charging_price` - charging_price
-
-        * `time_price` - time_price'
-    Contact:
+    ConnectAPIOpeningTimes:
       type: object
       properties:
-        phone:
-          type:
-          - string
-          - 'null'
-    TilesProperty:
-      type: object
-      properties:
-        count:
-          type: integer
-        expansion_zoom:
-          type: integer
-        speed:
-          $ref: '#/components/schemas/SpeedEnum'
-        status:
-          $ref: '#/components/schemas/Status80fEnum'
-        operator_id:
-          type: string
-      required:
-      - count
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    ConnectAPIRegularHours:
-      type: object
-      properties:
-        weekday:
-          $ref: '#/components/schemas/WeekdayEnum'
-        period_begin:
-          type:
-          - string
-          - 'null'
-        period_end:
-          type:
-          - string
-          - 'null'
-      required:
-      - period_begin
-      - period_end
-    Error:
-      type: object
-      properties:
-        type:
-          allOf:
-          - $ref: '#/components/schemas/ErrorTypeEnum'
-          description: 'Type of the error
-
-
-            * `validation_error` - validation_error
-
-            * `payment_method_error` - payment_method_error
-
-            * `payment_error` - payment_error
-
-            * `temporary_locked` - temporary_locked
-
-            * `already_charging` - already_charging
-
-            * `already_stopped` - already_stopped
-
-            * `station_availability_issue` - station_availability_issue
-
-            * `billing_data_required` - billing_data_required
-
-            * `charging_provider_error` - charging_provider_error
-
-            * `unexpected_error` - unexpected_error
-
-            * `pre_authorization_failed` - pre_authorization_failed'
-        details:
-          type: string
-          description: Additional details about the error
-        payment_intent_client_secret:
-          type: string
-          description: Client secret of the payment intent that failed
-      required:
-      - details
-      - type
-    ConnectAPIPriceGroup:
-      type: object
-      description: Serializer for OCPI station details.
-      properties:
-        type:
-          type: string
-        power:
-          type: number
-          format: double
-        evse_ids:
-          type: array
-          items:
-            type: string
-        prices:
-          $ref: '#/components/schemas/ConnectAPIPrices'
-        local_datetime:
-          type: string
-          format: date-time
-        currency:
-          type: string
-        pre_authorization_amount:
-          type: string
-        is_fallback:
+        twentyfourseven:
           type: boolean
-          default: false
-          description: Whether this is the price set by Cariqa because no prices from CPOs
-      required:
-      - currency
-      - evse_ids
-      - local_datetime
-      - power
-      - pre_authorization_amount
-      - prices
-      - type
-    ConnectAPIEvse:
-      type: object
-      properties:
-        evse_id:
-          type: string
-        status:
-          $ref: '#/components/schemas/ConnectAPIEvseStatusEnum'
-      required:
-      - evse_id
-      - status
-    PaginatedConnectAPIStationList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
+        regular_hours:
           type: array
           items:
-            $ref: '#/components/schemas/ConnectAPIStation'
-    OCPIOperatorInfo:
-      type: object
-      description: "Serializer for OCPI operator information.\n\nAttributes:\n    name (str): The name of the operator (required).\n    contact: Operator's contact information."
-      properties:
-        name:
-          type: string
-        contact:
-          allOf:
-          - $ref: '#/components/schemas/Contact'
+            $ref: '#/components/schemas/ConnectAPIRegularHours'
       required:
-      - name
+      - regular_hours
+      - twentyfourseven
     AmenitiesEnum:
       enum:
       - HOTEL
@@ -687,160 +536,6 @@ components:
         * `FUEL_STATION` - FUEL_STATION
 
         * `WIFI` - WIFI'
-    TimePriceItem:
-      type: object
-      properties:
-        time_from:
-          type: string
-          description: 'Format: `hh:mm`'
-        time_to:
-          type: string
-          description: 'Format: `hh:mm`'
-        date_from:
-          type: string
-          description: 'Format: `YYYY-MM-DD`'
-        date_to:
-          type: string
-          description: 'Format: `YYYY-MM-DD`'
-        gross_price:
-          type: string
-          description: 'Raw price. No VAT. If TIME-based: is per hour. Example: 12.44 EUR/hour (excl. VAT)'
-        user_facing_price:
-          type: string
-          description: 'Price to display for users. VAT applied. If TIME-based: is per minute.'
-        grace_period_minutes:
-          type:
-          - number
-          - 'null'
-          format: double
-          description: Amount of time in minutes after which blocking fees starts to apply
-        tax:
-          type: number
-          format: double
-          description: Tax % applied to the price
-        blocking_cap:
-          type:
-          - string
-          - 'null'
-          description: Maximum amount of blocking fees which can be charged in one transaction.
-      required:
-      - blocking_cap
-      - date_from
-      - date_to
-      - grace_period_minutes
-      - gross_price
-      - tax
-      - time_from
-      - time_to
-      - user_facing_price
-    ConnectAPIPartnerFilterOperator:
-      type: object
-      description: This class is used to serialize the operators list info
-      properties:
-        name:
-          type: string
-        logo_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-      required:
-      - logo_url
-      - name
-    ConnectAPIPrices:
-      type: object
-      properties:
-        time_price:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/TimePriceItem'
-          description: 'TIME-based price. Example: 0.22 EUR/min'
-        kwh_price:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/TimePriceItem'
-          description: 'KWH-based price. Example: 0.55 eur/kwh'
-        blocking_fee:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/TimePriceItem'
-          description: 'Fees related for the vehicle being overstaying on the charging lot. Time-based. Example: 0.10 EUR/min after 240 min.'
-        session_fee:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/TimePriceItem'
-          description: 'One-off fee for charging. Example: 0.50 EUR'
-        starting_fee:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/TimePriceItem'
-          description: 'One-off fee for charging billed by Cariqa. Example: 0.59 EUR'
-    TilesFeatureCollection:
-      type: object
-      properties:
-        type:
-          type: string
-          default: Feature
-        station_id:
-          type: string
-          description: Available only for single-station features
-        cluster_id:
-          type: string
-          description: Available only when the feature represents a cluster of stations
-        geometry:
-          $ref: '#/components/schemas/TilesGeometryPoint'
-        properties:
-          $ref: '#/components/schemas/TilesProperty'
-        custom_properties:
-          $ref: '#/components/schemas/TilesCustomProperties'
-        price_properties:
-          $ref: '#/components/schemas/TilesPriceProperties'
-      required:
-      - geometry
-      - properties
-    TilesGeometryPoint:
-      type: object
-      properties:
-        type:
-          type: string
-          default: Point
-        coordinates:
-          type: array
-          items:
-            type: string
-          description: Latitude and longitude of the station as a list of floats
-      required:
-      - coordinates
-    Coordinates:
-      type: object
-      properties:
-        latitude:
-          type: string
-        longitude:
-          type: string
-      required:
-      - latitude
-      - longitude
     ErrorTypeEnum:
       enum:
       - validation_error
@@ -876,6 +571,13 @@ components:
         * `unexpected_error` - unexpected_error
 
         * `pre_authorization_failed` - pre_authorization_failed'
+    Contact:
+      type: object
+      properties:
+        phone:
+          type:
+          - string
+          - 'null'
     Status80fEnum:
       enum:
       - free
@@ -890,77 +592,40 @@ components:
         * `unknown` - unknown
 
         * `error` - error'
-    WeekdayEnum:
-      enum:
-      - MONDAY
-      - TUESDAY
-      - WEDNESDAY
-      - THURSDAY
-      - FRIDAY
-      - SATURDAY
-      - SUNDAY
-      - ALL
-      type: string
-      description: '* `MONDAY` - MONDAY
-
-        * `TUESDAY` - TUESDAY
-
-        * `WEDNESDAY` - WEDNESDAY
-
-        * `THURSDAY` - THURSDAY
-
-        * `FRIDAY` - FRIDAY
-
-        * `SATURDAY` - SATURDAY
-
-        * `SUNDAY` - SUNDAY
-
-        * `ALL` - ALL'
-    SpeedEnum:
-      enum:
-      - slow
-      - fast
-      - turbo
-      type: string
-      description: '* `slow` - slow
-
-        * `fast` - fast
-
-        * `turbo` - turbo'
-    ConnectAPITileResponse:
+    ConnectAPIPriceGroup:
       type: object
+      description: Serializer for OCPI station details.
       properties:
         type:
           type: string
-          default: FeatureCollection
-        features:
+        power:
+          type: number
+          format: double
+        evse_ids:
           type: array
           items:
-            $ref: '#/components/schemas/TilesFeatureCollection'
-      required:
-      - features
-    ErrorDetail:
-      type: object
-      properties:
-        detail:
+            type: string
+        prices:
+          $ref: '#/components/schemas/ConnectAPIPrices'
+        local_datetime:
           type: string
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - detail
-      - error
-    ConnectAPIOpeningTimes:
-      type: object
-      properties:
-        twentyfourseven:
+          format: date-time
+        currency:
+          type: string
+        pre_authorization_amount:
+          type: string
+        is_fallback:
           type: boolean
-        regular_hours:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIRegularHours'
+          default: false
+          description: Whether this is the price set by Cariqa because no prices from CPOs
       required:
-      - regular_hours
-      - twentyfourseven
+      - currency
+      - evse_ids
+      - local_datetime
+      - power
+      - pre_authorization_amount
+      - prices
+      - type
     ConnectAPIStation:
       type: object
       description: Serializer for OCPI station details.
@@ -1013,6 +678,90 @@ components:
       - opening_times
       - operator
       - price_groups
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: string
+        longitude:
+          type: string
+      required:
+      - latitude
+      - longitude
+    TilesProperty:
+      type: object
+      properties:
+        count:
+          type: integer
+        expansion_zoom:
+          type: integer
+        speed:
+          $ref: '#/components/schemas/SpeedEnum'
+        status:
+          $ref: '#/components/schemas/Status80fEnum'
+        operator_id:
+          type: string
+      required:
+      - count
+    ConnectAPITileResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          default: FeatureCollection
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/TilesFeatureCollection'
+      required:
+      - features
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    ConnectAPIPartnerFilterOperator:
+      type: object
+      description: This class is used to serialize the operators list info
+      properties:
+        name:
+          type: string
+        logo_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+      required:
+      - logo_url
+      - name
+    PaginatedConnectAPIStationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIStation'
     ConnectAPIEvseStatusEnum:
       enum:
       - AVAILABLE
@@ -1042,6 +791,257 @@ components:
         * `RESERVED` - RESERVED
 
         * `UNKNOWN` - UNKNOWN'
+    TimePriceItem:
+      type: object
+      properties:
+        time_from:
+          type: string
+          description: 'Format: `hh:mm`'
+        time_to:
+          type: string
+          description: 'Format: `hh:mm`'
+        date_from:
+          type: string
+          description: 'Format: `YYYY-MM-DD`'
+        date_to:
+          type: string
+          description: 'Format: `YYYY-MM-DD`'
+        gross_price:
+          type: string
+          description: 'Raw price. No VAT. If TIME-based: is per hour. Example: 12.44 EUR/hour (excl. VAT)'
+        user_facing_price:
+          type: string
+          description: 'Price to display for users. VAT applied. If TIME-based: is per minute.'
+        grace_period_minutes:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Amount of time in minutes after which blocking fees starts to apply
+        tax:
+          type: number
+          format: double
+          description: Tax % applied to the price
+        blocking_cap:
+          type:
+          - string
+          - 'null'
+          description: Maximum amount of blocking fees which can be charged in one transaction.
+      required:
+      - blocking_cap
+      - date_from
+      - date_to
+      - grace_period_minutes
+      - gross_price
+      - tax
+      - time_from
+      - time_to
+      - user_facing_price
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    Error:
+      type: object
+      properties:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
+          type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
+    TilesPriceProperties:
+      type: object
+      properties:
+        price:
+          type: string
+        type:
+          $ref: '#/components/schemas/TilesPricePropertiesTypeEnum'
+        currency:
+          type: string
+      required:
+      - currency
+      - price
+      - type
+    ConnectAPIEvse:
+      type: object
+      properties:
+        evse_id:
+          type: string
+        status:
+          $ref: '#/components/schemas/ConnectAPIEvseStatusEnum'
+      required:
+      - evse_id
+      - status
+    OCPIOperatorInfo:
+      type: object
+      description: "Serializer for OCPI operator information.\n\nAttributes:\n    name (str): The name of the operator (required).\n    contact: Operator's contact information."
+      properties:
+        name:
+          type: string
+        contact:
+          allOf:
+          - $ref: '#/components/schemas/Contact'
+      required:
+      - name
+    ConnectAPIRegularHours:
+      type: object
+      properties:
+        weekday:
+          $ref: '#/components/schemas/WeekdayEnum'
+        period_begin:
+          type:
+          - string
+          - 'null'
+        period_end:
+          type:
+          - string
+          - 'null'
+      required:
+      - period_begin
+      - period_end
+    TilesPricePropertiesTypeEnum:
+      enum:
+      - charging_price
+      - time_price
+      type: string
+      description: '* `charging_price` - charging_price
+
+        * `time_price` - time_price'
+    ConnectAPIPrices:
+      type: object
+      properties:
+        time_price:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          description: 'TIME-based price. Example: 0.22 EUR/min'
+        kwh_price:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          description: 'KWH-based price. Example: 0.55 eur/kwh'
+        blocking_fee:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          description: 'Fees related for the vehicle being overstaying on the charging lot. Time-based. Example: 0.10 EUR/min after 240 min.'
+        session_fee:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          description: 'One-off fee for charging. Example: 0.50 EUR'
+        starting_fee:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TimePriceItem'
+          description: 'One-off fee for charging billed by Cariqa. Example: 0.59 EUR'
+    TilesGeometryPoint:
+      type: object
+      properties:
+        type:
+          type: string
+          default: Point
+        coordinates:
+          type: array
+          items:
+            type: string
+          description: Latitude and longitude of the station as a list of floats
+      required:
+      - coordinates
+    WeekdayEnum:
+      enum:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+      - SUNDAY
+      - ALL
+      type: string
+      description: '* `MONDAY` - MONDAY
+
+        * `TUESDAY` - TUESDAY
+
+        * `WEDNESDAY` - WEDNESDAY
+
+        * `THURSDAY` - THURSDAY
+
+        * `FRIDAY` - FRIDAY
+
+        * `SATURDAY` - SATURDAY
+
+        * `SUNDAY` - SUNDAY
+
+        * `ALL` - ALL'
+    SpeedEnum:
+      enum:
+      - slow
+      - fast
+      - turbo
+      type: string
+      description: '* `slow` - slow
+
+        * `fast` - fast
+
+        * `turbo` - turbo'
   securitySchemes:
     BearerAuth:
       type: http

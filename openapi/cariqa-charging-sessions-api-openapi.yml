@@ -275,6 +275,215 @@ paths:
           description: ''
 components:
   schemas:
+    StationInfo:
+      type: object
+      properties:
+        station_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 250
+        station_address:
+          type:
+          - string
+          - 'null'
+          maxLength: 250
+        country:
+          type:
+          - string
+          - 'null'
+          maxLength: 10
+        station_speed:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        connector_standard:
+          type:
+          - string
+          - 'null'
+          maxLength: 40
+        connector_power:
+          type:
+          - number
+          - 'null'
+          format: double
+        support_phone:
+          type:
+          - string
+          - 'null'
+          maxLength: 30
+        latitude:
+          type:
+          - string
+          - 'null'
+          maxLength: 30
+        longitude:
+          type:
+          - string
+          - 'null'
+          maxLength: 30
+    ConnectAPIUserFacingSessionPrices:
+      type: object
+      properties:
+        kwh_price:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: KWH-based price applied to session and used for billing
+        time_price:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: TIME-based price applied to session and used for billing
+        session_fee:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: One-off fee applied to session and used for billing
+        blocking_fee:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: Merged info about the blocking fees applied to session and used for billing
+        starting_fee:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: One-off Cariqa fee applied to session and used for billing
+        grace_period_minutes:
+          type:
+          - integer
+          - 'null'
+          description: Amount of time in minutes after which blocking fees starts to apply
+        blocking_cap:
+          type:
+          - string
+          - 'null'
+          description: Maximum amount of blocking fees which can be charged in one transaction.
+        currency:
+          type: string
+          maxLength: 3
+      required:
+      - blocking_cap
+      - blocking_fee
+      - grace_period_minutes
+      - kwh_price
+      - session_fee
+      - starting_fee
+      - time_price
+    ConnectAPIStartChargingRequest:
+      type: object
+      description: "Start charge request serializer.\n\n:param evse_id: Evse id of the station to charge at.\n:param payment_method_id: Stripe id of the payment method\n which should be used for PAYG.\n:param car_id: Id of the car to charge."
+      properties:
+        evse_id:
+          type: string
+        payment_method_id:
+          type: string
+      required:
+      - evse_id
+      - payment_method_id
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    PatchedConnectAPIChargingSession:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        start_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        end_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        duration:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        consumed_energy:
+          type:
+          - string
+          - 'null'
+          format: decimal
+          pattern: ^-?\d{0,5}(?:\.\d{0,3})?$
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+        evse_id:
+          type: string
+          readOnly: true
+        station_info:
+          allOf:
+          - $ref: '#/components/schemas/StationInfo'
+          readOnly: true
+        is_partner:
+          type: boolean
+          readOnly: true
+        logo_url:
+          type:
+          - string
+          - 'null'
+          description: Return station's operator logo url.
+          readOnly: true
+        user_facing_session_prices:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserFacingSessionPrices'
+          readOnly: true
+        session_cost:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIPAYGSummary'
+          readOnly: true
+        rates:
+          minimum: 0
+          maximum: 32767
+          oneOf:
+          - $ref: '#/components/schemas/RatesEnum'
+          - $ref: '#/components/schemas/NullEnum'
+    PaginatedConnectAPIChargingSessionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIChargingSession'
     ConnectAPIChargingSession:
       type: object
       properties:
@@ -351,137 +560,6 @@ components:
       - start_time
       - station_info
       - user_facing_session_prices
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    Error:
-      type: object
-      properties:
-        type:
-          allOf:
-          - $ref: '#/components/schemas/ErrorTypeEnum'
-          description: 'Type of the error
-
-
-            * `validation_error` - validation_error
-
-            * `payment_method_error` - payment_method_error
-
-            * `payment_error` - payment_error
-
-            * `temporary_locked` - temporary_locked
-
-            * `already_charging` - already_charging
-
-            * `already_stopped` - already_stopped
-
-            * `station_availability_issue` - station_availability_issue
-
-            * `billing_data_required` - billing_data_required
-
-            * `charging_provider_error` - charging_provider_error
-
-            * `unexpected_error` - unexpected_error
-
-            * `pre_authorization_failed` - pre_authorization_failed'
-        details:
-          type: string
-          description: Additional details about the error
-        payment_intent_client_secret:
-          type: string
-          description: Client secret of the payment intent that failed
-      required:
-      - details
-      - type
-    StationInfo:
-      type: object
-      properties:
-        station_name:
-          type:
-          - string
-          - 'null'
-          maxLength: 250
-        station_address:
-          type:
-          - string
-          - 'null'
-          maxLength: 250
-        country:
-          type:
-          - string
-          - 'null'
-          maxLength: 10
-        station_speed:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        connector_standard:
-          type:
-          - string
-          - 'null'
-          maxLength: 40
-        connector_power:
-          type:
-          - number
-          - 'null'
-          format: double
-        support_phone:
-          type:
-          - string
-          - 'null'
-          maxLength: 30
-        latitude:
-          type:
-          - string
-          - 'null'
-          maxLength: 30
-        longitude:
-          type:
-          - string
-          - 'null'
-          maxLength: 30
-    PaginatedConnectAPIChargingSessionList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIChargingSession'
-    ConnectAPIStartChargingRequest:
-      type: object
-      description: "Start charge request serializer.\n\n:param evse_id: Evse id of the station to charge at.\n:param payment_method_id: Stripe id of the payment method\n which should be used for PAYG.\n:param car_id: Id of the car to charge."
-      properties:
-        evse_id:
-          type: string
-        payment_method_id:
-          type: string
-      required:
-      - evse_id
-      - payment_method_id
     ConnectAPIPAYGSummary:
       type: object
       description: PAYG summary serializer.
@@ -545,33 +623,6 @@ components:
       - session_fee_cost
       - starting_fee_cost
       - time_cost
-    ErrorDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - detail
-      - error
-    RatesEnum:
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      - 5
-      type: integer
-      description: '* `1` - 1
-
-        * `2` - 2
-
-        * `3` - 3
-
-        * `4` - 4
-
-        * `5` - 5'
     ErrorTypeEnum:
       enum:
       - validation_error
@@ -610,123 +661,72 @@ components:
     NullEnum:
       enum:
       - null
-    ConnectAPIUserFacingSessionPrices:
+    RatesEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+      description: '* `1` - 1
+
+        * `2` - 2
+
+        * `3` - 3
+
+        * `4` - 4
+
+        * `5` - 5'
+    ErrorDetail:
       type: object
       properties:
-        kwh_price:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-          description: KWH-based price applied to session and used for billing
-        time_price:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-          description: TIME-based price applied to session and used for billing
-        session_fee:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-          description: One-off fee applied to session and used for billing
-        blocking_fee:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-          description: Merged info about the blocking fees applied to session and used for billing
-        starting_fee:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-          description: One-off Cariqa fee applied to session and used for billing
-        grace_period_minutes:
-          type:
-          - integer
-          - 'null'
-          description: Amount of time in minutes after which blocking fees starts to apply
-        blocking_cap:
-          type:
-          - string
-          - 'null'
-          description: Maximum amount of blocking fees which can be charged in one transaction.
-        currency:
+        detail:
           type: string
-          maxLength: 3
+        error:
+          $ref: '#/components/schemas/Error'
       required:
-      - blocking_cap
-      - blocking_fee
-      - grace_period_minutes
-      - kwh_price
-      - session_fee
-      - starting_fee
-      - time_price
-    PatchedConnectAPIChargingSession:
+      - detail
+      - error
+    Error:
       type: object
       properties:
-        id:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
           type: string
-          readOnly: true
-        start_time:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        end_time:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-        duration:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        consumed_energy:
-          type:
-          - string
-          - 'null'
-          format: decimal
-          pattern: ^-?\d{0,5}(?:\.\d{0,3})?$
-          readOnly: true
-        is_active:
-          type: boolean
-          readOnly: true
-        evse_id:
+          description: Additional details about the error
+        payment_intent_client_secret:
           type: string
-          readOnly: true
-        station_info:
-          allOf:
-          - $ref: '#/components/schemas/StationInfo'
-          readOnly: true
-        is_partner:
-          type: boolean
-          readOnly: true
-        logo_url:
-          type:
-          - string
-          - 'null'
-          description: Return station's operator logo url.
-          readOnly: true
-        user_facing_session_prices:
-          allOf:
-          - $ref: '#/components/schemas/ConnectAPIUserFacingSessionPrices'
-          readOnly: true
-        session_cost:
-          allOf:
-          - $ref: '#/components/schemas/ConnectAPIPAYGSummary'
-          readOnly: true
-        rates:
-          minimum: 0
-          maximum: 32767
-          oneOf:
-          - $ref: '#/components/schemas/RatesEnum'
-          - $ref: '#/components/schemas/NullEnum'
+          description: Client secret of the payment intent that failed
+      required:
+      - details
+      - type
   securitySchemes:
     BearerAuth:
       type: http

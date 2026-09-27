@@ -59,31 +59,6 @@ paths:
           description: ''
 components:
   schemas:
-    PaginatedConnectAPIDebtList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIDebt'
     Detail:
       type: object
       description: 400 status error message response serializer.
@@ -112,6 +87,31 @@ components:
       - currency
       - payment_intent_client_secret
       - session_id
+    PaginatedConnectAPIDebtList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIDebt'
   securitySchemes:
     BearerAuth:
       type: http
