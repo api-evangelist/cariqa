@@ -98,14 +98,6 @@ paths:
           description: ''
 components:
   schemas:
-    AccountTypeEnum:
-      enum:
-      - personal
-      - business
-      type: string
-      description: '* `personal` - personal
-
-        * `business` - business'
     ConnectAPIBillingDetails:
       type: object
       description: 'Serializer which is used to serialize data with the possible business
@@ -154,6 +146,16 @@ components:
       required:
       - line1
       - postal_code
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
     Detail:
       type: object
       description: 400 status error message response serializer.
@@ -197,16 +199,14 @@ components:
         * `unexpected_error` - unexpected_error
 
         * `pre_authorization_failed` - pre_authorization_failed'
-    ErrorDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - detail
-      - error
+    AccountTypeEnum:
+      enum:
+      - personal
+      - business
+      type: string
+      description: '* `personal` - personal
+
+        * `business` - business'
     Error:
       type: object
       properties:

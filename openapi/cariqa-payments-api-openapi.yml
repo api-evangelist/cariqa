@@ -190,6 +190,46 @@ paths:
           description: ''
 components:
   schemas:
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    ConnectAPICardPM:
+      type: object
+      properties:
+        brand:
+          type: string
+          description: 'Card brand. Example: visa'
+        last4:
+          type: string
+          description: Last 4 digits of the card number
+        expiration_date:
+          type: string
+          description: 'Expiration date of the card. Format: MM/YY'
+        cardholder_name:
+          type:
+          - string
+          - 'null'
+          description: Cardholder name, if present
+      required:
+      - brand
+      - cardholder_name
+      - expiration_date
+      - last4
     PaginatedConnectAPIPMList:
       type: object
       required:
@@ -215,28 +255,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConnectAPIPM'
-    ConnectAPICardPM:
-      type: object
-      properties:
-        brand:
-          type: string
-          description: 'Card brand. Example: visa'
-        last4:
-          type: string
-          description: Last 4 digits of the card number
-        expiration_date:
-          type: string
-          description: 'Expiration date of the card. Format: MM/YY'
-        cardholder_name:
-          type:
-          - string
-          - 'null'
-          description: Cardholder name, if present
-      required:
-      - brand
-      - cardholder_name
-      - expiration_date
-      - last4
     ConnectAPIPM:
       type: object
       properties:
@@ -270,14 +288,6 @@ components:
       - default
       - id
       - type
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
     ConnectAPISetupIntent:
       type: object
       properties:
@@ -331,16 +341,6 @@ components:
         * `unexpected_error` - unexpected_error
 
         * `pre_authorization_failed` - pre_authorization_failed'
-    ErrorDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - detail
-      - error
     Error:
       type: object
       properties:

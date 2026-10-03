@@ -58,14 +58,6 @@ paths:
           description: ''
 components:
   schemas:
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
     PaginatedConnectAPIInvoiceListList:
       type: object
       required:
@@ -125,6 +117,14 @@ components:
       - link
       - refund
       - total
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
   securitySchemes:
     BearerAuth:
       type: http
