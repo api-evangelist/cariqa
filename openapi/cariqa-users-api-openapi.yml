@@ -217,15 +217,39 @@ paths:
           description: ''
 components:
   schemas:
-    ConnectAPIUserCustomProperties:
+    Detail:
       type: object
+      description: 400 status error message response serializer.
       properties:
-        external_id:
+        detail:
+          type: string
+      required:
+      - detail
+    PaginatedConnectAPIUserList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
           type:
           - string
           - 'null'
-          description: External id of the user provided by Connect backend
-          maxLength: 250
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIUser'
     ErrorDetail:
       type: object
       properties:
@@ -236,14 +260,58 @@ components:
       required:
       - detail
       - error
-    Detail:
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
+    ConnectAPIUserCustomProperties:
       type: object
-      description: 400 status error message response serializer.
       properties:
-        detail:
-          type: string
-      required:
-      - detail
+        external_id:
+          type:
+          - string
+          - 'null'
+          description: External id of the user provided by Connect backend
+          maxLength: 250
+    LocaleEnum:
+      enum:
+      - en
+      - de
+      type: string
+      description: '* `en` - EN
+
+        * `de` - DE'
     Error:
       type: object
       properties:
@@ -283,90 +351,6 @@ components:
       required:
       - details
       - type
-    PatchedConnectAPIUser:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        email:
-          type:
-          - string
-          - 'null'
-          format: email
-        locale:
-          $ref: '#/components/schemas/LocaleEnum'
-        custom_properties:
-          allOf:
-          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
-    ErrorTypeEnum:
-      enum:
-      - validation_error
-      - payment_method_error
-      - payment_error
-      - temporary_locked
-      - already_charging
-      - already_stopped
-      - station_availability_issue
-      - billing_data_required
-      - charging_provider_error
-      - unexpected_error
-      - pre_authorization_failed
-      type: string
-      description: '* `validation_error` - validation_error
-
-        * `payment_method_error` - payment_method_error
-
-        * `payment_error` - payment_error
-
-        * `temporary_locked` - temporary_locked
-
-        * `already_charging` - already_charging
-
-        * `already_stopped` - already_stopped
-
-        * `station_availability_issue` - station_availability_issue
-
-        * `billing_data_required` - billing_data_required
-
-        * `charging_provider_error` - charging_provider_error
-
-        * `unexpected_error` - unexpected_error
-
-        * `pre_authorization_failed` - pre_authorization_failed'
-    PaginatedConnectAPIUserList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIUser'
-    LocaleEnum:
-      enum:
-      - en
-      - de
-      type: string
-      description: '* `en` - EN
-
-        * `de` - DE'
     ConnectAPIUser:
       type: object
       properties:
@@ -385,6 +369,22 @@ components:
           - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
       required:
       - id
+    PatchedConnectAPIUser:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        custom_properties:
+          allOf:
+          - $ref: '#/components/schemas/ConnectAPIUserCustomProperties'
   securitySchemes:
     BearerAuth:
       type: http

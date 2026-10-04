@@ -58,31 +58,6 @@ paths:
           description: ''
 components:
   schemas:
-    PaginatedConnectAPIInvoiceListList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIInvoiceList'
     ConnectAPIInvoiceList:
       type: object
       description: 'Extended invoice list serializer (payg flow should have session id).
@@ -125,6 +100,31 @@ components:
           type: string
       required:
       - detail
+    PaginatedConnectAPIInvoiceListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIInvoiceList'
   securitySchemes:
     BearerAuth:
       type: http

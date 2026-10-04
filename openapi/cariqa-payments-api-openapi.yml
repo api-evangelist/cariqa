@@ -190,71 +190,6 @@ paths:
           description: ''
 components:
   schemas:
-    ErrorDetail:
-      type: object
-      properties:
-        detail:
-          type: string
-        error:
-          $ref: '#/components/schemas/Error'
-      required:
-      - detail
-      - error
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
-    ConnectAPICardPM:
-      type: object
-      properties:
-        brand:
-          type: string
-          description: 'Card brand. Example: visa'
-        last4:
-          type: string
-          description: Last 4 digits of the card number
-        expiration_date:
-          type: string
-          description: 'Expiration date of the card. Format: MM/YY'
-        cardholder_name:
-          type:
-          - string
-          - 'null'
-          description: Cardholder name, if present
-      required:
-      - brand
-      - cardholder_name
-      - expiration_date
-      - last4
-    PaginatedConnectAPIPMList:
-      type: object
-      required:
-      - count
-      - results
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ConnectAPIPM'
     ConnectAPIPM:
       type: object
       properties:
@@ -288,6 +223,14 @@ components:
       - default
       - id
       - type
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
     ConnectAPISetupIntent:
       type: object
       properties:
@@ -295,6 +238,41 @@ components:
           type: string
       required:
       - setup_intent_client_secret
+    PaginatedConnectAPIPMList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectAPIPM'
+    ErrorDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+        error:
+          $ref: '#/components/schemas/Error'
+      required:
+      - detail
+      - error
     ConnectAPIPMTypeEnum:
       enum:
       - card
@@ -306,41 +284,6 @@ components:
         * `apple_pay` - apple_pay
 
         * `google_pay` - google_pay'
-    ErrorTypeEnum:
-      enum:
-      - validation_error
-      - payment_method_error
-      - payment_error
-      - temporary_locked
-      - already_charging
-      - already_stopped
-      - station_availability_issue
-      - billing_data_required
-      - charging_provider_error
-      - unexpected_error
-      - pre_authorization_failed
-      type: string
-      description: '* `validation_error` - validation_error
-
-        * `payment_method_error` - payment_method_error
-
-        * `payment_error` - payment_error
-
-        * `temporary_locked` - temporary_locked
-
-        * `already_charging` - already_charging
-
-        * `already_stopped` - already_stopped
-
-        * `station_availability_issue` - station_availability_issue
-
-        * `billing_data_required` - billing_data_required
-
-        * `charging_provider_error` - charging_provider_error
-
-        * `unexpected_error` - unexpected_error
-
-        * `pre_authorization_failed` - pre_authorization_failed'
     Error:
       type: object
       properties:
@@ -380,6 +323,63 @@ components:
       required:
       - details
       - type
+    ConnectAPICardPM:
+      type: object
+      properties:
+        brand:
+          type: string
+          description: 'Card brand. Example: visa'
+        last4:
+          type: string
+          description: Last 4 digits of the card number
+        expiration_date:
+          type: string
+          description: 'Expiration date of the card. Format: MM/YY'
+        cardholder_name:
+          type:
+          - string
+          - 'null'
+          description: Cardholder name, if present
+      required:
+      - brand
+      - cardholder_name
+      - expiration_date
+      - last4
+    ErrorTypeEnum:
+      enum:
+      - validation_error
+      - payment_method_error
+      - payment_error
+      - temporary_locked
+      - already_charging
+      - already_stopped
+      - station_availability_issue
+      - billing_data_required
+      - charging_provider_error
+      - unexpected_error
+      - pre_authorization_failed
+      type: string
+      description: '* `validation_error` - validation_error
+
+        * `payment_method_error` - payment_method_error
+
+        * `payment_error` - payment_error
+
+        * `temporary_locked` - temporary_locked
+
+        * `already_charging` - already_charging
+
+        * `already_stopped` - already_stopped
+
+        * `station_availability_issue` - station_availability_issue
+
+        * `billing_data_required` - billing_data_required
+
+        * `charging_provider_error` - charging_provider_error
+
+        * `unexpected_error` - unexpected_error
+
+        * `pre_authorization_failed` - pre_authorization_failed'
   securitySchemes:
     BearerAuth:
       type: http
