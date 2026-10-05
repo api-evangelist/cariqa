@@ -1,0 +1,12 @@
+{
+ "url": "https://docs.cariqa.com/openapi.yaml",
+ "requested_url": "https://docs.cariqa.com/openapi.yaml",
+ "status": 200,
+ "content_type": "text/yaml",
+ "bytes": 78206,
+ "sha256": "8c60c6aec04c0567870542718d06a23621f876640271c32df69e8ebf8495be26",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.957), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
