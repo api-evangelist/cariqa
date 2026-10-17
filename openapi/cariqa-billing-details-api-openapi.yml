@@ -98,14 +98,45 @@ paths:
           description: ''
 components:
   schemas:
-    Detail:
+    Error:
       type: object
-      description: 400 status error message response serializer.
       properties:
-        detail:
+        type:
+          allOf:
+          - $ref: '#/components/schemas/ErrorTypeEnum'
+          description: 'Type of the error
+
+
+            * `validation_error` - validation_error
+
+            * `payment_method_error` - payment_method_error
+
+            * `payment_error` - payment_error
+
+            * `temporary_locked` - temporary_locked
+
+            * `already_charging` - already_charging
+
+            * `already_stopped` - already_stopped
+
+            * `station_availability_issue` - station_availability_issue
+
+            * `billing_data_required` - billing_data_required
+
+            * `charging_provider_error` - charging_provider_error
+
+            * `unexpected_error` - unexpected_error
+
+            * `pre_authorization_failed` - pre_authorization_failed'
+        details:
           type: string
+          description: Additional details about the error
+        payment_intent_client_secret:
+          type: string
+          description: Client secret of the payment intent that failed
       required:
-      - detail
+      - details
+      - type
     ErrorDetail:
       type: object
       properties:
@@ -116,14 +147,6 @@ components:
       required:
       - detail
       - error
-    AccountTypeEnum:
-      enum:
-      - personal
-      - business
-      type: string
-      description: '* `personal` - personal
-
-        * `business` - business'
     ConnectAPIBillingDetails:
       type: object
       description: 'Serializer which is used to serialize data with the possible business
@@ -172,45 +195,14 @@ components:
       required:
       - line1
       - postal_code
-    Error:
+    Detail:
       type: object
+      description: 400 status error message response serializer.
       properties:
-        type:
-          allOf:
-          - $ref: '#/components/schemas/ErrorTypeEnum'
-          description: 'Type of the error
-
-
-            * `validation_error` - validation_error
-
-            * `payment_method_error` - payment_method_error
-
-            * `payment_error` - payment_error
-
-            * `temporary_locked` - temporary_locked
-
-            * `already_charging` - already_charging
-
-            * `already_stopped` - already_stopped
-
-            * `station_availability_issue` - station_availability_issue
-
-            * `billing_data_required` - billing_data_required
-
-            * `charging_provider_error` - charging_provider_error
-
-            * `unexpected_error` - unexpected_error
-
-            * `pre_authorization_failed` - pre_authorization_failed'
-        details:
+        detail:
           type: string
-          description: Additional details about the error
-        payment_intent_client_secret:
-          type: string
-          description: Client secret of the payment intent that failed
       required:
-      - details
-      - type
+      - detail
     ErrorTypeEnum:
       enum:
       - validation_error
@@ -246,6 +238,14 @@ components:
         * `unexpected_error` - unexpected_error
 
         * `pre_authorization_failed` - pre_authorization_failed'
+    AccountTypeEnum:
+      enum:
+      - personal
+      - business
+      type: string
+      description: '* `personal` - personal
+
+        * `business` - business'
   securitySchemes:
     BearerAuth:
       type: http

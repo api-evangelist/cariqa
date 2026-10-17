@@ -59,14 +59,6 @@ paths:
           description: ''
 components:
   schemas:
-    Detail:
-      type: object
-      description: 400 status error message response serializer.
-      properties:
-        detail:
-          type: string
-      required:
-      - detail
     ConnectAPIDebt:
       type: object
       properties:
@@ -112,6 +104,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConnectAPIDebt'
+    Detail:
+      type: object
+      description: 400 status error message response serializer.
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
   securitySchemes:
     BearerAuth:
       type: http
