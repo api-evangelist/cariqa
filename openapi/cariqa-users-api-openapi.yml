@@ -391,3 +391,9 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: JWT Authorization header using the Bearer scheme.
+x-provenance:
+  method: harvested
+  publisher: Cariqa
+  source: https://docs.cariqa.com/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
