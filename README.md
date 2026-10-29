@@ -64,6 +64,130 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Cariqa is a company surfaced as a portfolio company of anthemis, techstars and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Cariqa provides backend-to-backend payment and access infrastructure for EV charging across Europe. Its Connect API lets OEMs, mobility services, fleets and platforms offer electric-vehicle charging through a single integration — discovering charging stations and live connector availability, creating and managing users, collecting payment methods via Stripe (PSD2/SCA compliant), starting and stopping charging sessions on 900,000+ charge points, and retrieving session history, debts and invoices. Cariqa removes reseller markups so charge point operators set the price drivers pay, while platforms earn a transaction revenue share. Backed by Anthemis and Techstars.
 
-Backed by: anthemis, techstars — https://cariqa.com/
+**Areas:** Company · EV Charging · Electric Vehicles · Payments · Mobility · E-Mobility · Charge Point Operator · Energy
+
+## Cariqa on APIs.io
+
+Everything profiled for Cariqa is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cariqa/](https://apis.io/providers/cariqa/)** — or go straight to one of the APIs or properties below.
+
+### APIs (7)
+
+- [Cariqa Billing Details API](https://apis.io/apis/cariqa/cariqa-billing-details-api/) — The Billing Details API from Cariqa — 1 operation(s) for billing details.
+- [Cariqa Charging Sessions API](https://apis.io/apis/cariqa/cariqa-charging-sessions-api/) — The Charging Sessions API from Cariqa — 4 operation(s) for charging sessions.
+- [Cariqa Debts API](https://apis.io/apis/cariqa/cariqa-debts-api/) — The Debts API from Cariqa — 1 operation(s) for debts.
+- [Cariqa Invoices API](https://apis.io/apis/cariqa/cariqa-invoices-api/) — The Invoices API from Cariqa — 1 operation(s) for invoices.
+- [Cariqa Payments API](https://apis.io/apis/cariqa/cariqa-payments-api/) — The Payments API from Cariqa — 4 operation(s) for payments.
+- [Cariqa Stations API](https://apis.io/apis/cariqa/cariqa-stations-api/) — The Stations API from Cariqa — 4 operation(s) for stations.
+- [Cariqa Users API](https://apis.io/apis/cariqa/cariqa-users-api/) — The Users API from Cariqa — 2 operation(s) for users.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [cariqa-connect](https://apis.io/servers/cariqa/cariqa-connect/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Cariqa Agentic Access](https://apis.io/agentic-access/cariqa/cariqa-agentic-access/)
+
+#### Collections (7)
+
+Postman and Open Collection request collections.
+
+- [Cariqa Connect Billing Details API](https://apis.io/collections/cariqa/open-cariqa-billing-details-api/)
+- [Cariqa Connect Billing Details Charging Sessions API](https://apis.io/collections/cariqa/open-cariqa-charging-sessions-api/)
+- [Cariqa Connect Billing Details Debts API](https://apis.io/collections/cariqa/open-cariqa-debts-api/)
+- [Cariqa Connect Billing Details Invoices API](https://apis.io/collections/cariqa/open-cariqa-invoices-api/)
+- [Cariqa Connect Billing Details Payments API](https://apis.io/collections/cariqa/open-cariqa-payments-api/)
+- [Cariqa Connect Billing Details Stations API](https://apis.io/collections/cariqa/open-cariqa-stations-api/)
+- [Cariqa Connect Billing Details Users API](https://apis.io/collections/cariqa/open-cariqa-users-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Cariqa Openapi Overlay](https://apis.io/overlays/cariqa/cariqa-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Cariqa Authentication](https://apis.io/security/cariqa/cariqa-authentication/)
+- [Cariqa Domain Security](https://apis.io/security/cariqa/cariqa-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://cariqa.com/)
+- [Documentation](https://docs.cariqa.com)
+- [Getting started](https://docs.cariqa.com/getting-started)
+- [API reference](https://docs.cariqa.com/api-reference)
+- [Support](https://help.cariqa.com/en/)
+- [Blog](https://cariqa.com/en/blog)
+- [Terms of service](https://cariqa.com/en/terms-conditions)
+- [Privacy policy](https://cariqa.com/en/privacy)
+- [GitHub](https://github.com/Cariqa)
+
+## API Evangelist rating
+
+**Kin Score 44.3** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.7 |
+| Contract quality | 51.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 21.1 |
+
+**Agent readiness 29.6** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 24.6** — Energy & Utilities
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cariqa/](https://apis.io/providers/cariqa/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cariqa: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cariqa/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
